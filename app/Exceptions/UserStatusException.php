@@ -2,17 +2,16 @@
 
 namespace App\Exceptions;
 
-use App\Utils\APIResponder;
-use Illuminate\Http\JsonResponse;
+use Exception;
 
-class UserStatusException
+class UserStatusException extends Exception
 {
-    use APIResponder;
     /**
      * Create a new class instance.
      */
-    public static function notActiveOrBlocked(): JsonResponse
+    public static function notActiveOrBlocked(): self
     {
-        return (new self)->failedResponse("User is not active or blocked");
+        // return (new self)->failedResponse("User is not active or blocked");
+        return new self("User is not active or blocked");
     }
 }

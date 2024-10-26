@@ -37,11 +37,11 @@ class ProfileService
         if (isset($data['current_password']) && isset($data['password'])) {
 
             if ($data['current_password'] === $data['password']) {
-                return PasswordException::sameAsCurrent();
+                throw PasswordException::sameAsCurrent();
             }
 
             if (!Hash::check($data['current_password'], $user->password)) {
-                return PasswordException::incorrect();
+                throw PasswordException::incorrect();
             }
 
             $user->update(['password' => $data['password']]);
@@ -57,7 +57,7 @@ class ProfileService
         $user = auth()->user();
 
         if(!Hash::check($data['password'], $user->password)) {
-                return PasswordException::incorrect();
+                throw PasswordException::incorrect();
         }
 
         $user->delete();

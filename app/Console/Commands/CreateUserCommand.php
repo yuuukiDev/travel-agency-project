@@ -2,13 +2,13 @@
 
 namespace App\Console\Commands;
 
-use App\Http\Requests\CreateUserRequest;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
+use App\Utils\Constants;
 
 class CreateUserCommand extends Command
 {
@@ -50,7 +50,7 @@ class CreateUserCommand extends Command
         }
 
         $role = Role::where('name', $roleName)->first();
-        if (! $role) {
+        if (!$role) {
             $this->error('Role not found');
 
             return;
@@ -61,6 +61,7 @@ class CreateUserCommand extends Command
                 'name' => $user['name'],
                 'email' => $user['email'],
                 'password' => bcrypt($user['password']),
+                'is_active' => Constants::$USER_IS_ACTIVE
             ]);
             $newUser->roles()->attach($role->id);
         });

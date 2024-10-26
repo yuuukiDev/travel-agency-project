@@ -2,23 +2,21 @@
 
 namespace App\Exceptions;
 
-use App\Utils\APIResponder;
-use Illuminate\Http\JsonResponse;
+use Exception;
 
-class PasswordException
+class PasswordException extends Exception
 {
-    use APIResponder;
     /**
      * Create a new class instance.
      */
 
-     public static function incorrect(): JsonResponse
+     public static function incorrect(): self
      {
-        return (new self)->failedResponse("Password is incorrect");
+        return new self("Password is incorrect");
      }
 
-     public static function sameAsCurrent(): JsonResponse
+     public static function sameAsCurrent(): self
      {
-        return (new self)->failedResponse("New password cannot be the same as the current password!");
+        return new self ("New password cannot be the same as the current password!");
      }
 }

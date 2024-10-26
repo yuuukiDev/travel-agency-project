@@ -53,11 +53,11 @@ class AuthService
         $user = User::whereEmail($data['email'])->firstOrFail();
 
         if(!Hash::check($data['password'], $user->password)) {
-            return PasswordException::incorrect();
+            throw PasswordException::incorrect();
         }
 
         if($user->is_active != Constants::$USER_IS_ACTIVE) {
-            return UserStatusException::notActiveOrBlocked();
+            throw UserStatusException::notActiveOrBlocked();
         }
 
         $user->access_token = $user->createToken("Personal Access Token")->plainTextToken;
@@ -90,7 +90,7 @@ class AuthService
 
         if(Hash::check($data['password'], $user->password)) 
         {
-            return PasswordException::sameAsCurrent();
+            throw PasswordException::sameAsCurrent();
         }
 
         $user->update([

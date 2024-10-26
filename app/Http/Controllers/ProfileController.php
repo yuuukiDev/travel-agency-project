@@ -19,7 +19,6 @@ class ProfileController extends Controller
         $this->profileService = $profileService;
     }
 
-
     public function update(ProfileRequest $request): JsonResponse
     {
 
@@ -27,8 +26,6 @@ class ProfileController extends Controller
 
         return $this->successResponse($user, "Profile updated successfully!");
     }
-    
-    
 
     public function destroy(PasswordValidationRequest $request): JsonResponse
     {

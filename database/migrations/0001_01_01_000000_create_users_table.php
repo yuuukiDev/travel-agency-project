@@ -13,18 +13,22 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
+            // user 
             $table->uuid("id")->primary();
             $table->string('name')->nullable();
-            $table->string("first_name")->nullable();
-            $table->string("last_name")->nullable();
-            $table->string("phone_number")->nullable();
-            $table->string("address")->nullable();
-            $table->string("avatar")->nullable();
             $table->string('email')->nullable();
             $table->string('password')->nullable();
             $table->tinyInteger('is_active')->default(Constants::$USER_INACTIVE);
             $table->string('verification_code')->nullable();
             $table->timestamp('email_verified_at')->nullable();
+
+            // profile
+            $table->string("first_name")->nullable();
+            $table->string("last_name")->nullable();
+            $table->string("phone_number")->nullable();
+            $table->string("address")->nullable();
+            $table->string("avatar")->nullable();
+            
             $table->rememberToken();
             $table->timestamps();
         });

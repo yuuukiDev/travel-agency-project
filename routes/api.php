@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminController;
+
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\TourController;
 use App\Http\Controllers\TravelController;
@@ -53,33 +53,37 @@ Route::middleware('auth:api')->controller(ProfileController::class)->group(funct
 
 // admin endpoints
 
+
 Route::prefix('admin')
-            ->middleware(['auth:sanctum', 'role:admin'])
-            ->controller(AdminController::class)
-            ->group(function () {
+    ->middleware(['auth:sanctum', 'role:admin'])
+    ->group(function () {
 
-    Route::post('travels', 'createTravel');
+        // travel routes
+            Route::controller(App\Http\Controllers\Admin\TravelController::class)->group(function () {
+            Route::post('travels', 'createTravel');
+            Route::put('travels/{travel}', 'updateTravel');
+            Route::delete('travels/{travel}', 'deleteTravel');
+        });
 
-    Route::post('travels/{travel}/tours', 'createTour');
+        // tour routes
+            Route::controller(App\Http\Controllers\Admin\TourController::class)->group(function () {
+            Route::post('travels/{travel}/tours', 'createTour');
+            Route::put('travels/{travel}/tours', 'updateTour');
+            Route::delete('travels/{travel}/tours', 'deleteTour');
+        });
+    });
 
-    Route::put('travels/{travel}', 'updateTravel');
-
-    Route::delete('travels/{travel}', 'deleteTravel');
-
-    Route::put('travels/{travel}/tours', 'updateTour');
-
-    Route::delete('travels/{travel}/tours', 'deleteTour');
-});
 
 // editor endpoints
 
 Route::prefix('editor')
             ->middleware(['auth:sanctum', 'role:editor'])
-            ->controller(AdminController::class)
             ->group(function () {
 
-    Route::put('travels/{travel}', 'updateTravel');
+    // travel route
+    Route::put('travels/{travel}', [App\Http\Controllers\Admin\TravelController::class, 'updateTravel']);
 
-    Route::put('travels/{travel}/tours', 'updateTour');
+    // tour route
+    Route::put('travels/{travel}/tours', [App\Http\Controllers\Admin\TourController::class, 'updateTour']);
 
 });

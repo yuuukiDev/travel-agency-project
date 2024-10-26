@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Exceptions\UserStatusException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\ForgetPasswordRequest;
@@ -38,12 +39,11 @@ class AuthController extends Controller
         return $this->successResponse($user, "User has been verified you can login now!");
     }
 
-    public function login(LoginRequest $request): JsonResponse
+    public function login(LoginRequest $request)
     {
 
-         $user = $this->authService->login($request->validated());
-
-
+        $user = $this->authService->login($request->validated());
+         
         return $this->successResponse($user, "User has been logged in successfully");
     }
     public function forgetPassword(ForgetPasswordRequest $request): JsonResponse
