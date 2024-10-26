@@ -15,6 +15,11 @@ class AuthService
     /**
      * Create a new class instance.
      */
+
+    private function generateAccessToken (User $user)
+    {
+        return $user->createToken('Personal Access Token')->plainTextToken;
+    }
     private function findOTP($data)
     {
         $user = User::whereEmail($data['email'])
@@ -30,9 +35,10 @@ class AuthService
 
         event(new UserVerificationRequested($user));
 
-        $user->access_token = $user->createToken('Personal Access Token')->plainTextToken;
-
-        return $user;
+        return [
+            'user' => $user,
+            'access_token' => $this->generateAccessToken($user)
+        ];
     }
 
     public function verify($data)
@@ -44,9 +50,10 @@ class AuthService
             'verification_code' => null,
         ]);
 
-        $user->access_token = $user->createToken('Personal Access Token')->plainTextToken;
-
-        return $user;
+        return [
+            'user' => $user,
+            'access_token' => $this->generateAccessToken($user)
+        ];
     }
 
     public function login($data)
@@ -61,9 +68,10 @@ class AuthService
             throw UserStatusException::notActiveOrBlocked();
         }
 
-        $user->access_token = $user->createToken('Personal Access Token')->plainTextToken;
-
-        return $user;
+        return [
+            'user' => $user,
+            'access_token' => $this->generateAccessToken($user)
+        ];
     }
 
     public function forgetPassword($data)
@@ -79,9 +87,10 @@ class AuthService
     {
         $user = $this->findOTP($data);
 
-        $user->access_token = $user->createToken('Personal Access Token')->plainTextToken;
-
-        return $user;
+        return [
+            'user' => $user,
+            'access_token' => $this->generateAccessToken($user)
+        ];
     }
 
     public function resetPassword($data)

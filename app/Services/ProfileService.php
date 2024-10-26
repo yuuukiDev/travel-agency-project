@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Exceptions\PasswordException;
 use App\Notifications\PasswordChangedNotification;
 use App\Notifications\UserDeletedNotification;
-use Illuminate\Container\Attributes\Storage;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 
