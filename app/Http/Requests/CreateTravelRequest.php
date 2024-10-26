@@ -22,10 +22,10 @@ class CreateTravelRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "is_public" => ["boolean"],
-            "name" => ["unique:travels"],
-            "description" => ["string"],
-            "number_of_days" => ["integer"],
+            'is_public' => ['boolean'],
+            'name' => ['unique:travels'],
+            'description' => ['string'],
+            'number_of_days' => ['integer'],
         ];
     }
 }

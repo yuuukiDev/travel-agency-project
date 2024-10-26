@@ -22,7 +22,7 @@ class PasswordValidationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "password" => ["required", "confirmed", "min:6", "max:15", "regex:/[a-zA-Z]/"]
+            'password' => ['required', 'confirmed', 'min:6', 'max:15', 'regex:/[a-zA-Z]/'],
         ];
     }
 }

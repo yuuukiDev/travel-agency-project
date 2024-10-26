@@ -9,12 +9,13 @@ use App\Utils\APIResponder;
 class TravelController extends Controller
 {
     use APIResponder;
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $travels = Travel::where("is_public", true)->with("tours")->paginate();
+        $travels = Travel::where('is_public', true)->with('tours')->paginate();
 
         return $this->successResponse(TravelResource::collection($travels), "There's all the travels!!");
     }

@@ -3,7 +3,6 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -14,8 +13,8 @@ class UserDeletedNotification extends Notification
     /**
      * Create a new notification instance.
      */
+    protected $user;
 
-     protected $user;
     public function __construct($user)
     {
         //
@@ -38,9 +37,9 @@ class UserDeletedNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->subject('Account has been deleted')
-                    ->line('Your Account has been deleted Successfully!!!')
-                    ->line('If this was not you, please contact support immediately.');
+            ->subject('Account has been deleted')
+            ->line('Your Account has been deleted Successfully!!!')
+            ->line('If this was not you, please contact support immediately.');
     }
 
     /**

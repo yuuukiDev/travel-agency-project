@@ -9,12 +9,11 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote')->hourly();
 
-
-Schedule::call(function() {
+Schedule::call(function () {
     if (User::where('verification_code', '!=', null)
         ->where('updated_at', '<', now()->subMinutes(5))
         ->exists()) {
-        
+
         User::where('verification_code', '!=', null)
             ->where('updated_at', '<', now()->subMinutes(5))
             ->update(['verification_code' => null]);

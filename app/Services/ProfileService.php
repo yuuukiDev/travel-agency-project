@@ -5,31 +5,28 @@ namespace App\Services;
 use App\Exceptions\PasswordException;
 use App\Notifications\PasswordChangedNotification;
 use App\Notifications\UserDeletedNotification;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Container\Attributes\Storage;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Hash;
 
 class ProfileService
 {
     /**
      * Create a new class instance.
      */
+    public function updateProfile($data)
+    {
+        $user = auth()->user();
 
-
-     public function updateProfile($data)
-     {
-        $user = auth()->user(); 
-
-
-        if(isset($data['avatar'])){
+        if (isset($data['avatar'])) {
 
             $avatar = $data['avatar']->store('avatars', 'public');
 
-            if($user->avatar) {
+            if ($user->avatar) {
                 Storage::disk('public')->delete($user->avatar);
             }
             $user->update([
-                'avatar' => $avatar
+                'avatar' => $avatar,
             ]);
         }
         $user->update(Arr::except($data, ['current_password', 'password', 'password_confirmation', 'avatar']));
@@ -40,7 +37,7 @@ class ProfileService
                 throw PasswordException::sameAsCurrent();
             }
 
-            if (!Hash::check($data['current_password'], $user->password)) {
+            if (! Hash::check($data['current_password'], $user->password)) {
                 throw PasswordException::incorrect();
             }
 
@@ -50,14 +47,14 @@ class ProfileService
 
             return $user;
         }
-     }
+    }
 
-     public function deleteProfile($data)
-     {
+    public function deleteProfile($data)
+    {
         $user = auth()->user();
 
-        if(!Hash::check($data['password'], $user->password)) {
-                throw PasswordException::incorrect();
+        if (! Hash::check($data['password'], $user->password)) {
+            throw PasswordException::incorrect();
         }
 
         $user->delete();
@@ -65,5 +62,5 @@ class ProfileService
         $user->notify(new UserDeletedNotification(env('ADMIN_EMAIL ')));
 
         return $user;
-     }
+    }
 }

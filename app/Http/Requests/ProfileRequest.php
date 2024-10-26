@@ -22,15 +22,15 @@ class ProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "first_name" => ["nullable", "string"],
-            "last_name" => ["nullable", "string"],
-            "current_password" => ["nullable", "min:6", "max:15", "regex:/[a-zA-Z]/"],
-            "password" => ["nullable", "confirmed", "min:6", "max:15", "regex:/[a-zA-Z]/"],
-            "email" => ["nullable", "email", "unique:users,email"],
-            "phone_number" => ["nullable", "string", "max:11"],
-            "address" => ["nullable", "string"],
-            "country" => ["nullable", "string"],
-            "avatar" => ["nullable", "image", "max:2048"],
+            'first_name' => ['nullable', 'string'],
+            'last_name' => ['nullable', 'string'],
+            'current_password' => ['nullable', 'min:6', 'max:15', 'regex:/[a-zA-Z]/'],
+            'password' => ['nullable', 'confirmed', 'min:6', 'max:15', 'regex:/[a-zA-Z]/'],
+            'email' => ['nullable', 'email', 'unique:users,email'],
+            'phone_number' => ['nullable', 'string', 'max:11'],
+            'address' => ['nullable', 'string'],
+            'country' => ['nullable', 'string'],
+            'avatar' => ['nullable', 'image', 'max:2048'],
         ];
     }
 }

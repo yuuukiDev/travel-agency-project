@@ -9,16 +9,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Tour extends Model
 {
-    use SoftDeletes, HasUuids;
+    use HasUuids, SoftDeletes;
 
     //
 
     protected $fillable = [
-        "travel_id",
-        "name",
-        "starting_date",
-        "ending_date",
-        "price"
+        'travel_id',
+        'name',
+        'starting_date',
+        'ending_date',
+        'price',
     ];
 
     public function travel(): BelongsTo

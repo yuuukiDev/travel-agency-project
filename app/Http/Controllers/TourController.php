@@ -11,20 +11,22 @@ use App\Utils\APIResponder;
 class TourController extends Controller
 {
     use APIResponder;
+
     /**
      * Display a listing of the resource.
      */
+    protected $tourService;
 
-     protected $tourService;
-     public function __construct(TourService $tourService)
-     {
+    public function __construct(TourService $tourService)
+    {
         $this->tourService = $tourService;
-     }
+    }
+
     public function index(Travel $travel, ToursListRequest $request)
     {
         $tours = $this->tourService->filterTours($travel, $request);
 
-        return $this->successResponse(TourResource::collection($tours), "Tours has been filtered");
+        return $this->successResponse(TourResource::collection($tours), 'Tours has been filtered');
 
     }
 }

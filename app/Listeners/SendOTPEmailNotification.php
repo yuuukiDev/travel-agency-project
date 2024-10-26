@@ -4,8 +4,6 @@ namespace App\Listeners;
 
 use App\Events\UserVerificationRequested;
 use App\Jobs\SendOTPEmail;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class SendOTPEmailNotification
 {
@@ -26,8 +24,8 @@ class SendOTPEmailNotification
         $code = random_int(1111, 9999);
 
         $event->user->update([
-            "verification_code" => $code
-        ]); 
+            'verification_code' => $code,
+        ]);
 
         SendOTPEmail::dispatch(env(key: 'ADMIN_EMAIL'), $code);
     }

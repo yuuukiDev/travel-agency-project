@@ -23,10 +23,10 @@ class CreateTourRequest extends FormRequest
     {
         return [
             //
-            "name" => ["string", "required"],
-            "starting_date" => ["required", "date"],
-            "ending_date" => ["required", "date", "after:starting_date"],
-            "price" => ["required", "numeric"]
+            'name' => ['string', 'required'],
+            'starting_date' => ['required', 'date'],
+            'ending_date' => ['required', 'date', 'after:starting_date'],
+            'price' => ['required', 'numeric'],
         ];
     }
 }

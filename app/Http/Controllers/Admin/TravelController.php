@@ -9,6 +9,7 @@ use App\Models\Travel;
 use App\Utils\APIResponder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
+
 class TravelController extends Controller
 {
     //
@@ -18,10 +19,8 @@ class TravelController extends Controller
     {
         $travel = Travel::create($request->validated());
 
-        return $this->successResponse(new TravelResource($travel), "Travel Created Successfully!!");   
+        return $this->successResponse(new TravelResource($travel), 'Travel Created Successfully!!');
     }
-
-
 
     public function updateTravel(Travel $travel, CreateTravelRequest $request): JsonResponse
     {
@@ -33,15 +32,13 @@ class TravelController extends Controller
 
         $travel->save();
 
-        return $this->successResponse(new TravelResource($travel), "Travel Updated Successfully!!");    
+        return $this->successResponse(new TravelResource($travel), 'Travel Updated Successfully!!');
     }
-
 
     public function deleteTravel(Travel $travel): JsonResponse
     {
         $travel->delete();
 
-        return $this->successResponse($travel, "Travel deleted successfully!");
+        return $this->successResponse($travel, 'Travel deleted successfully!');
     }
-
 }

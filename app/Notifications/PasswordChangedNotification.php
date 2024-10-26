@@ -3,7 +3,6 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -12,6 +11,7 @@ class PasswordChangedNotification extends Notification
     use Queueable;
 
     protected $user;
+
     /**
      * Create a new notification instance.
      */
@@ -37,9 +37,9 @@ class PasswordChangedNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->subject('Password Changed')
-                    ->line('Your Password has been changed successfully!!')
-                    ->line('If this was not you, please contact support immediately.');
+            ->subject('Password Changed')
+            ->line('Your Password has been changed successfully!!')
+            ->line('If this was not you, please contact support immediately.');
     }
 
     /**

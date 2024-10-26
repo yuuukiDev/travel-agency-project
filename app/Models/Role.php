@@ -9,8 +9,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Role extends Model
 {
     //
-    use SoftDeletes, HasUuids;
+    use HasUuids, SoftDeletes;
+
     protected $fillable = [
-        "name",
+        'name',
     ];
 }

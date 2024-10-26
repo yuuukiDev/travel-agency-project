@@ -9,23 +9,24 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Travel extends Model
 {
-    use SoftDeletes, HasUuids;
+    use HasUuids, SoftDeletes;
     //
 
-    protected $table = "travels";
-    
+    protected $table = 'travels';
+
     protected $fillable = [
-        "is_public",
-        "slug",
-        "name",
-        "description",
-        "number_of_days"
+        'is_public',
+        'slug',
+        'name',
+        'description',
+        'number_of_days',
     ];
 
     public function tours(): HasMany
     {
         return $this->hasMany(Tour::class);
     }
+
     public function getNumberOfNightsAttribute()
     {
         return $this->number_of_days - 1;

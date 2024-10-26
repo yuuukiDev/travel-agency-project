@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('travels', function (Blueprint $table) {
-            $table->uuid("id")->primary();
-            $table->boolean("is_public")->default(false);
-            $table->string("name")->nullable();
-            $table->string("slug")->nullable();
-            $table->longText("description")->nullable();
-            $table->integer("number_of_days")->nullable();
+            $table->uuid('id')->primary();
+            $table->boolean('is_public')->default(false);
+            $table->string('name')->nullable();
+            $table->string('slug')->nullable();
+            $table->longText('description')->nullable();
+            $table->integer('number_of_days')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
