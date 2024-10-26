@@ -1,0 +1,34 @@
+<?php
+
+namespace App\Listeners;
+
+use App\Events\UserVerificationRequested;
+use App\Jobs\SendOTPEmail;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
+
+class SendOTPEmailNotification
+{
+    /**
+     * Create the event listener.
+     */
+    public function __construct()
+    {
+        //
+    }
+
+    /**
+     * Handle the event.
+     */
+    public function handle(UserVerificationRequested $event): void
+    {
+        //
+        $code = random_int(1111, 9999);
+
+        $event->user->update([
+            "verification_code" => $code
+        ]); 
+
+        SendOTPEmail::dispatch(env(key: 'ADMIN_EMAIL'), $code);
+    }
+}
