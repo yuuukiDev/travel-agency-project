@@ -16,6 +16,6 @@ class TravelController extends Controller
     {
         $travels = Travel::where("is_public", true)->with("tours")->paginate();
 
-        return $this->successResponse(TravelResource::collection($travels), "There's all the travels!!");   
+        return $this->successResponse(TravelResource::collection($travels), "There's all the travels!!");
     }
 }
