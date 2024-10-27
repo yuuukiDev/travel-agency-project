@@ -15,14 +15,14 @@ class TravelController extends Controller
     //
     use APIResponder;
 
-    public function createTravel(CreateTravelRequest $request): JsonResponse
+    public function store(CreateTravelRequest $request): JsonResponse
     {
         $travel = Travel::create($request->validated());
 
         return $this->successResponse(new TravelResource($travel), 'Travel Created Successfully!!');
     }
 
-    public function updateTravel(Travel $travel, CreateTravelRequest $request): JsonResponse
+    public function update(Travel $travel, CreateTravelRequest $request): JsonResponse
     {
         $travel->update($request->validated());
 
@@ -35,7 +35,7 @@ class TravelController extends Controller
         return $this->successResponse(new TravelResource($travel), 'Travel Updated Successfully!!');
     }
 
-    public function deleteTravel(Travel $travel): JsonResponse
+    public function destroy(Travel $travel): JsonResponse
     {
         $travel->delete();
 
