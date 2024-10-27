@@ -15,18 +15,54 @@ class AuthService
     /**
      * Create a new class instance.
      */
-
-    private function generateAccessToken (User $user)
+    private function generateAccessToken(User $user)
     {
         return $user->createToken('Personal Access Token')->plainTextToken;
     }
-    private function findOTP($data)
+
+    private function deleteAccessTokens(User $user)
     {
-        $user = User::whereEmail($data['email'])
-            ->whereVerificationCode($data['code'])
-            ->firstOrFail();
+        $user->tokens()->delete();
+    }
+
+    private function findUserByEmail($email)
+    {
+        return User::whereEmail($email)->firstOrFail();
+    }
+
+    private function validateUserCredentials($data)
+    {
+        $user = $this->findUserByEmail($data['email']);
+
+        if (! Hash::check($data['password'], $user->password)) {
+            throw PasswordException::incorrect();
+        }
+
+        $this->ensureUserIsActive($user);
 
         return $user;
+    }
+
+    private function findUserByEmailAndOTP($data)
+    {
+        return $this->findUserByEmail($data['email'])
+            ->whereVerificationCode($data['code'])
+            ->firstOrFail();
+    }
+
+    private function ensureUserIsActive(User $user)
+    {
+        if ($user->is_active != Constants::$USER_IS_ACTIVE) {
+            throw UserStatusException::notActiveOrBlocked();
+        }
+    }
+
+    private function respondWithUserAndToken(User $user)
+    {
+        return [
+            'user' => $user,
+            'access_token' => $this->generateAccessToken($user),
+        ];
     }
 
     public function register($data)
@@ -35,48 +71,31 @@ class AuthService
 
         event(new UserVerificationRequested($user));
 
-        return [
-            'user' => $user,
-            'access_token' => $this->generateAccessToken($user)
-        ];
+        return $this->respondWithUserAndToken($user);
     }
 
     public function verify($data)
     {
-        $user = $this->findOTP($data);
+        $user = $this->findUserByEmailAndOTP($data);
 
         $user->update([
             'is_active' => Constants::$USER_IS_ACTIVE,
             'verification_code' => null,
         ]);
 
-        return [
-            'user' => $user,
-            'access_token' => $this->generateAccessToken($user)
-        ];
+        return $this->respondWithUserAndToken($user);
     }
 
     public function login($data)
     {
-        $user = User::whereEmail($data['email'])->firstOrFail();
+        $user = $this->validateUserCredentials($data);
 
-        if (! Hash::check($data['password'], $user->password)) {
-            throw PasswordException::incorrect();
-        }
-
-        if ($user->is_active != Constants::$USER_IS_ACTIVE) {
-            throw UserStatusException::notActiveOrBlocked();
-        }
-
-        return [
-            'user' => $user,
-            'access_token' => $this->generateAccessToken($user)
-        ];
+        return $this->respondWithUserAndToken($user);
     }
 
     public function forgetPassword($data)
     {
-        $user = User::whereEmail($data['email'])->firstOrFail();
+        $user = $this->findUserByEmail($data['email']);
 
         event(new UserVerificationRequested($user));
 
@@ -85,40 +104,31 @@ class AuthService
 
     public function checkOTP($data)
     {
-        $user = $this->findOTP($data);
+        $user = $this->findUserByEmailAndOTP($data);
 
-        return [
-            'user' => $user,
-            'access_token' => $this->generateAccessToken($user)
-        ];
+        return $this->respondWithUserAndToken($user);
     }
 
-    public function resetPassword($data)
+    public function resetPassword($data, $user)
     {
-
-        $user = auth()->user();
 
         if (Hash::check($data['password'], $user->password)) {
             throw PasswordException::sameAsCurrent();
         }
 
         $user->update([
-            'password' => $data['password'],
+            'password' => Hash::make($data['password']),
         ]);
 
-        $user->tokens()->delete();
+        $this->deleteAccessTokens($user);
 
-        $user->notify(new PasswordChangedNotification(env('ADMIN_EMAIL ')));
+        $user->notify(new PasswordChangedNotification(config('app.admin_email')));
 
         return $user;
     }
 
-    public function logout()
+    public function logout($user)
     {
-        $user = auth()->user();
-
-        $user->tokens()->delete();
-
-        return $user;
+        return $this->deleteAccessTokens($user);
     }
 }

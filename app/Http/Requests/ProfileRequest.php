@@ -26,7 +26,7 @@ class ProfileRequest extends FormRequest
             'last_name' => ['nullable', 'string'],
             'current_password' => ['nullable', 'min:6', 'max:15', 'regex:/[a-zA-Z]/'],
             'password' => ['nullable', 'confirmed', 'min:6', 'max:15', 'regex:/[a-zA-Z]/'],
-            'email' => ['nullable', 'email', 'unique:users,email'],
+            'email' => ['nullable', 'email:rfc,dns', 'unique:users,email'],
             'phone_number' => ['nullable', 'string', 'max:11'],
             'address' => ['nullable', 'string'],
             'country' => ['nullable', 'string'],

@@ -3,63 +3,63 @@
 namespace App\Services;
 
 use App\Exceptions\PasswordException;
-use App\Notifications\PasswordChangedNotification;
-use App\Notifications\UserDeletedNotification;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileService
 {
     /**
      * Create a new class instance.
      */
-    public function updateProfile($data)
+    private function handleAvatarUpdate($user, $avatar) // not working
     {
-        $user = auth()->user();
+        $avatarPath = $avatar->store('avatars', 'public');
+
+        if ($user->avatar) {
+            Storage::disk('public')->delete($user->avatar);
+        }
+
+        $user->update(['avatar' => $avatarPath]);
+    }
+
+    private function changePassword($user, $data)
+    {
+        if ($data['current_password'] === $data['password']) {
+            throw PasswordException::sameAsCurrent();
+        }
+
+        if (! Hash::check($data['current_password'], $user->password)) {
+            throw PasswordException::incorrect();
+        }
+        $user->update(['password' => Hash::make($data['password'])]);
+
+    }
+
+    public function updateProfile($data, $user)
+    {
 
         if (isset($data['avatar'])) {
-
-            $avatar = $data['avatar']->store('avatars', 'public');
-
-            if ($user->avatar) {
-                Storage::disk('public')->delete($user->avatar);
-            }
-            $user->update([
-                'avatar' => $avatar,
-            ]);
+            $this->handleAvatarUpdate($user, $data['avatar']);
         }
+
         $user->update(Arr::except($data, ['current_password', 'password', 'password_confirmation', 'avatar']));
 
         if (isset($data['current_password']) && isset($data['password'])) {
-
-            if ($data['current_password'] === $data['password']) {
-                throw PasswordException::sameAsCurrent();
-            }
-
-            if (! Hash::check($data['current_password'], $user->password)) {
-                throw PasswordException::incorrect();
-            }
-
-            $user->update(['password' => $data['password']]);
-
-            $user->notify(new PasswordChangedNotification(env('ADMIN_EMAIL ')));
-
-            return $user;
+            $this->changePassword($user, $data);
         }
+
+        return $user;
     }
 
-    public function deleteProfile($data)
+    public function deleteUser($data, $user)
     {
-        $user = auth()->user();
 
         if (! Hash::check($data['password'], $user->password)) {
             throw PasswordException::incorrect();
         }
 
         $user->delete();
-
-        $user->notify(new UserDeletedNotification(env('ADMIN_EMAIL ')));
 
         return $user;
     }

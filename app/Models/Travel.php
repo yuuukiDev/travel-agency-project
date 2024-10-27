@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -30,5 +31,15 @@ class Travel extends Model
     public function getNumberOfNightsAttribute()
     {
         return $this->number_of_days - 1;
+    }
+
+    public function scopePublic(Builder $query)
+    {
+        $query->where('is_public', true);
+    }
+
+    public function scopNotPublic(Builder $query)
+    {
+        $query->where('is_public', false);
     }
 }

@@ -8,7 +8,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * @mixin \App\Models\Tour
  */
-
 class TourResource extends JsonResource
 {
     /**

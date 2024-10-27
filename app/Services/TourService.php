@@ -10,34 +10,28 @@ class TourService
     public function filterTours(Travel $travel, ToursListRequest $request)
     {
         $tours = $travel->tours();
-
-        $filters = [
-            'priceFrom' => function ($query, $value) {
-                $query->where('price', '>=', $value * 100);
-            },
-
-            'priceTo' => function ($query, $value) {
-                $query->where('price', '<=', $value * 100);
-            },
-
-            'dateFrom' => function ($query, $value) {
-                $query->where('starting_date', '>=', $value);
-            },
-
-            'dateTo' => function ($query, $value) {
-                $query->where('starting_date', '<=', $value);
-            },
-        ];
-
-        foreach ($filters as $key => $filter) {
-            if ($request->$key) {
-                $filter($tours, $request->$key);
-            }
+    
+        if ($request->priceFrom) {
+            $tours->where('price', '>=', $request->priceFrom);
         }
+    
+        if ($request->priceTo) {
+            $tours->where('price', '<=', $request->priceTo);
+        }
+    
+        if ($request->dateFrom) {
+            $tours->where('starting_date', '>=', $request->dateFrom);
+        }
+    
+        if ($request->dateTo) {
+            $tours->where('starting_date', '<=', $request->dateTo);
+        }
+    
         $sortBy = $request->sortBy ?? 'starting_date';
         $sortOrder = $request->sortOrder ?? 'asc';
         $tours->orderBy($sortBy, $sortOrder);
-
+    
         return $tours->paginate();
     }
+    
 }

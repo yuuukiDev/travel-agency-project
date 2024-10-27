@@ -8,25 +8,25 @@ use Illuminate\Support\Facades\Route;
 
 // public endpoints
 
-Route::group([], function () {
+// Route::group([], function () {
 
-    Route::get('travels', [TravelController::class, 'index']);
-    Route::get('/travels/{travel:slug}/tours', [TourController::class, 'index']);
+Route::get('travels', [TravelController::class, 'index']);
+Route::get('/travels/{travel:slug}/tours', [TourController::class, 'index']);
 
-    Route::middleware(['throttle:5,1'])
-        ->controller(AuthController::class)
-        ->group(function () {
+Route::middleware(['throttle:5,1'])
+    ->controller(AuthController::class)
+    ->group(function () {
 
-            Route::post('/register', 'register');
+        Route::post('/register', 'register');
 
-            Route::post('/login', 'login');
+        Route::post('/login', 'login');
 
-            Route::post('/forget-password', 'forgetPassword');
+        Route::post('/forget-password', 'forgetPassword');
 
-            Route::post('/check-verification-code', 'checkVerificationCode');
-        });
+        Route::post('/check-verification-code', 'checkVerificationCode');
+    });
 
-});
+// });
 
 // authenticated endpoints
 
@@ -40,6 +40,8 @@ Route::middleware('auth:api')
 
         Route::post('/logout', 'logout');
     });
+
+// profile
 
 Route::middleware('auth:api')->controller(ProfileController::class)->group(function () {
 
