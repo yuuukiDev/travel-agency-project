@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TourController;
 use App\Http\Controllers\TravelController;
 use Illuminate\Support\Facades\Route;
@@ -47,6 +49,8 @@ Route::middleware('auth:api')->group(function () {
     });
 
     // cart routes
+
+    // TODO "always gives null as a response" fix it (store method)
     Route::controller(CartController::class)->group(function(){
         Route::get('/carts', 'index');
         Route::post('/travels/{travel}/tours/{tour}', 'store');
@@ -54,6 +58,14 @@ Route::middleware('auth:api')->group(function () {
         Route::delete('/carts/items/{cartItem}', 'destroy');
     });
 
+
+    // Order routes 
+    // TODO "always give no response"
+    Route::controller(OrderController::class)->group(function () {
+        Route::post('orders/{cartId}/confirm', 'confirm');
+        Route::post('/orders/{orderId}/accept', 'accept');
+    });
+    
 });
 
 

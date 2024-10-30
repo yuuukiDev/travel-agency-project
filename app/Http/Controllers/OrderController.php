@@ -1,65 +1,32 @@
 <?php
-
 namespace App\Http\Controllers;
 
-use App\Models\Order;
-use Illuminate\Http\Request;
+use App\Services\OrderService;
+use App\Utils\APIResponder;
 
 class OrderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    use APIResponder;
+    private OrderService $orderService;
+
+    public function __construct(OrderService $orderService)
     {
-        //
+        $this->orderService = $orderService;
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Confirm an order from the cart.
      */
-    public function create()
+    public function confirm($cartId)
     {
-        //
+        $this->successResponse($this->orderService->confirm($cartId, auth()->id()), "Order Confirmed");
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Accept an order by ID.
      */
-    public function store(Request $request)
+    public function accept($orderId)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Order $order)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Order $order)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Order $order)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Order $order)
-    {
-        //
+        $this->successResponse($this->orderService->accept($orderId), "Order Accepted");
     }
 }

@@ -30,4 +30,9 @@ class Tour extends Model
     {
         return $this->hasMany(TourImage::class);
     }
+
+    public function orderItems(): HasMany
+    {
+        return $this->hasMany(OrderItem::class);
+    }
 }
