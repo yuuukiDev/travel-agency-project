@@ -8,7 +8,6 @@ use App\Models\Tour;
 use App\Services\TourImageService;
 use App\Utils\APIResponder;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class TourImageController extends Controller
 {
@@ -28,8 +27,7 @@ class TourImageController extends Controller
 
     public function update(TourImageRequest $request, Tour $tour, $tour_image_id)
     {
-        dd($request->all());
-        
+                
         return $this->successResponse(
             $this->tourImageService->update($request->validated(), $tour->id, $tour_image_id), 
             'Tour image updated successfully!'

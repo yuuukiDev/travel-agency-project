@@ -26,7 +26,7 @@ class OrderService
                 'user_id' => $userId,
                 'status' => Constants::$ORDER_PENDING,
             ]);
-
+            
             $cartItems = Cart::findOrFail($cartId)->items;
 
             foreach ($cartItems as $item) {
