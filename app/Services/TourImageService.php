@@ -43,9 +43,9 @@ class TourImageService
         return $this->createImage($data['image'], $tourId);
     }
 
-    public function update($data, $tour_id)
+    public function update($data, $tourId, $tourImageId)
     {
-        $tourImage = $this->findAndDeleteImage($data, $tour_id);
+        $tourImage = $this->findAndDeleteImage(['tour_image_id' => $tourImageId], $tourId);
 
         return $this->updateImage($tourImage, $data['image']);
     }

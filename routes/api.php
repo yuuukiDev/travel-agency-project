@@ -85,11 +85,11 @@ Route::prefix('admin')
 
         // something wrong with this!
 
-        // Route::controller(App\Http\Controllers\Admin\TourImageController::class)->group(function () {
-        //     Route::post('tours/{tour}/images', 'store'); // working
-        //     Route::put('tours/{tour}/images/{tour_image_id}', 'update'); // not working
-        //     Route::delete('tours/{tour}/images/{tour_image_id}', 'destroy'); // not working
-        // });
+        Route::controller(App\Http\Controllers\Admin\TourImageController::class)->group(function () {
+            Route::post('tours/{tour}/images', 'store'); // working
+            Route::put('tours/{tour}/images/{tour_image_id}', 'update'); // not working
+            Route::delete('tours/{tour}/images/{tour_image_id}', 'destroy'); // not working
+        });
 
     });
 
