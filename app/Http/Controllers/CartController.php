@@ -23,7 +23,11 @@ class CartController extends Controller
 
     public function index()
     {
-        return $this->successResponse(new CartResource($this->cartService->showAllCarts(auth()->id())));
+        return $this->successResponse(
+            new CartResource(
+                $this->cartService->showAllCarts(
+                    auth()->id()))
+        );
     }
 
     /**
@@ -31,7 +35,11 @@ class CartController extends Controller
      */
     public function store(CartRequest $request, $travel, $tour)
     {
-        return $this->successResponse($this->cartService->addItemToCart(auth()->id(), $request->validated(), $travel, $tour), 'Item added');
+        return $this->successResponse(
+            $this->cartService->addItemToCart(auth()->id(),
+                $request->validated(),
+                $travel, $tour), 'Item added successfully'
+        );
     }
 
     /**
@@ -40,7 +48,11 @@ class CartController extends Controller
     public function update(CartRequest $request, $cartItemId)
     {
 
-        return $this->successResponse($this->cartService->updateItem($request->validated(), $cartItemId), 'Cart updated');
+        return $this->successResponse(
+            $this->cartService->updateItem($request->validated(),
+                $cartItemId),
+            'Cart updated'
+        );
 
     }
 
@@ -50,6 +62,10 @@ class CartController extends Controller
     public function destroy($cartItemId)
     {
         //
-        return $this->successResponse($this->cartService->deleteItem($cartItemId), 'item deleted successfully!');
+        return $this->successResponse(
+            $this->cartService->deleteItem(
+                $cartItemId),
+            'item deleted successfully!'
+        );
     }
 }

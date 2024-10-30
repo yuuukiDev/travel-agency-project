@@ -1,6 +1,6 @@
 <?php
 
-use App\Utils\Constants;
+use App\Enums\UserStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('email')->nullable();
             $table->string('password')->nullable();
-            $table->tinyInteger('is_active')->default(Constants::$USER_INACTIVE);
+            $table->tinyInteger('is_active')->default(UserStatus::INACTIVE->value);
             $table->string('verification_code')->nullable();
             $table->timestamp('email_verified_at')->nullable();
 

@@ -2,12 +2,12 @@
 
 namespace App\Services;
 
+use App\Enums\UserStatus;
 use App\Events\UserVerificationRequested;
 use App\Exceptions\PasswordException;
 use App\Exceptions\UserStatusException;
 use App\Models\User;
 use App\Notifications\PasswordChangedNotification;
-use App\Utils\Constants;
 use Illuminate\Support\Facades\Hash;
 
 class AuthService
@@ -52,7 +52,7 @@ class AuthService
 
     private function ensureUserIsActive(User $user)
     {
-        if ($user->is_active != Constants::$USER_IS_ACTIVE) {
+        if ($user->is_active != UserStatus::ACTIVE->value) {
             throw UserStatusException::notActiveOrBlocked();
         }
     }
@@ -79,7 +79,7 @@ class AuthService
         $user = $this->findUserByEmailAndOTP($data);
 
         $user->update([
-            'is_active' => Constants::$USER_IS_ACTIVE,
+            'is_active' => UserStatus::ACTIVE->value,
             'verification_code' => null,
         ]);
 
@@ -88,9 +88,10 @@ class AuthService
 
     public function login($data)
     {
-        $user = $this->validateUserCredentials($data);
-
-        return $this->respondWithUserAndToken($user);
+        return $this->respondWithUserAndToken(
+            $this->validateUserCredentials(
+                $data
+            ));
     }
 
     public function forgetPassword($data)
@@ -104,9 +105,10 @@ class AuthService
 
     public function checkOTP($data)
     {
-        $user = $this->findUserByEmailAndOTP($data);
-
-        return $this->respondWithUserAndToken($user);
+        return $this->respondWithUserAndToken(
+            $this->findUserByEmailAndOTP(
+                $data)
+        );
     }
 
     public function resetPassword($data, $user)

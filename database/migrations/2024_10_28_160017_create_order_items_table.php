@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('tour_name')->nullable();
             $table->string('tour_image')->nullable();
             $table->unsignedBigInteger('qty')->nullable();
-            $table->double('price', 8, 2)->nullable();
-            $table->double('sub_total', 8, 2)->nullable();
+            $table->decimal('price', 8, 2)->nullable();
+            $table->decimal('sub_total', 8, 2)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

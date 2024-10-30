@@ -11,7 +11,15 @@ class TicketService
 {
     public function sendEmail($ticketId, $userName, $tourDetails, $totalQuantity, $orderId)
     {
-        Mail::to(config('app.admin_email'))->send(new TicketMail($ticketId, $userName, $tourDetails, $totalQuantity, $orderId));
+        Mail::to(config('app.admin_email'))
+            ->send(
+                new TicketMail(
+                    $ticketId,
+                    $userName,
+                    $tourDetails,
+                    $totalQuantity,
+                    $orderId)
+            );
     }
 
     public function getData($orderId)

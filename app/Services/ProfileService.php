@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Exceptions\PasswordException;
+use App\Notifications\PasswordChangedNotification;
+use App\Notifications\UserDeletedNotification;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -47,6 +49,9 @@ class ProfileService
 
         if (isset($data['current_password']) && isset($data['password'])) {
             $this->changePassword($user, $data);
+
+            $user->notify(new PasswordChangedNotification(config('app.admin_email')));
+
         }
 
         return $user;
@@ -60,6 +65,8 @@ class ProfileService
         }
 
         $user->delete();
+
+        $user->notify(new UserDeletedNotification(config('app.admin_email')));
 
         return $user;
     }

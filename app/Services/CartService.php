@@ -20,7 +20,7 @@ class CartService
             return $item;
 
         } else {
-            CartItem::create([
+            return CartItem::create([
                 'cart_id' => $cartId,
                 'tour_id' => $tourId,
                 'qty' => $qty,
@@ -30,7 +30,9 @@ class CartService
 
     public function showAllCarts($userId)
     {
-        return Cart::with('items')->where('user_id', $userId)->first();
+        return Cart::with('items')
+            ->where('user_id', $userId)
+            ->first();
     }
 
     public function addItemToCart($userId, $data, $travel, $tour)
@@ -44,7 +46,12 @@ class CartService
                 ->where('tour_id', $tour)
                 ->first();
 
-            $cartItem = $this->incrementOrCreateItem($item, $cart->id, $tour, $data['qty']);
+            $cartItem = $this->incrementOrCreateItem(
+                $item,
+                $cart->id,
+                $tour,
+                $data['qty']
+            );
 
             DB::commit();
 

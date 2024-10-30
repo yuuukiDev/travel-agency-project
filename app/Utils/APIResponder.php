@@ -2,6 +2,7 @@
 
 namespace App\Utils;
 
+use App\Enums\ApiResponse;
 use Illuminate\Http\JsonResponse;
 
 trait APIResponder
@@ -12,8 +13,8 @@ trait APIResponder
     public function successResponse($data = [], $message = null, $code = 200): JsonResponse
     {
         return response()->json([
-            'status' => Constants::$API_SUCCESS_STATUS,
-            'message' => $message ?? Constants::$API_SUCCESS_MESSAGE,
+            'status' => ApiResponse::SUCCESS_STATUS->value,
+            'message' => $message ?? ApiResponse::SUCCESS_MESSAGE->value,
             'data' => $data,
         ], $code);
     }
@@ -21,8 +22,8 @@ trait APIResponder
     public function failedResponse($message = null, $code = 400): JsonResponse
     {
         return response()->json([
-            'status' => Constants::$API_FAILED_STATUS,
-            'message' => $message ?? Constants::$API_FAILED_MESSAGE,
+            'status' => ApiResponse::FAILED_STATUS->value,
+            'message' => $message ?? APIResponse::FAILED_MESSAGE->value,
         ], $code);
     }
 }

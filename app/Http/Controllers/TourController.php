@@ -26,7 +26,11 @@ class TourController extends Controller
     {
         $tours = $this->tourService->filterTours($travel, $request);
 
-        return $this->successResponse(TourResource::collection($tours), 'Tours has been filtered');
+        return $this->successResponse(
+            TourResource::collection(
+                $tours),
+            'Tours has been filtered'
+        );
 
     }
 }

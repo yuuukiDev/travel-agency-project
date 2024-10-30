@@ -21,7 +21,11 @@ class OrderController extends Controller
      */
     public function confirm($cartId)
     {
-        return $this->successResponse($this->orderService->confirm($cartId, auth()->id()), 'Order Confirmed');
+        return $this->successResponse(
+            $this->orderService->confirm(
+                $cartId, auth()->id()),
+            'Order Confirmed'
+        );
     }
 
     /**
@@ -29,6 +33,10 @@ class OrderController extends Controller
      */
     public function accept($orderId)
     {
-        return $this->successResponse($this->orderService->accept($orderId), 'Order Accepted');
+        return $this->successResponse(
+            $this->orderService->accept(
+                $orderId),
+            'Order Accepted'
+        );
     }
 }

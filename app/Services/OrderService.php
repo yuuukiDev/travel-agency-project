@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
+use App\Enums\OrderStatus;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Utils\Constants;
 use Illuminate\Support\Facades\DB;
 
 class OrderService
@@ -24,9 +24,9 @@ class OrderService
         try {
             $order = Order::create([
                 'user_id' => $userId,
-                'status' => Constants::$ORDER_PENDING,
+                'status' => OrderStatus::PENDING->value,
             ]);
-            
+
             $cartItems = Cart::findOrFail($cartId)->items;
 
             foreach ($cartItems as $item) {
@@ -55,7 +55,7 @@ class OrderService
         $order = Order::findOrFail($orderId);
 
         $order->update([
-            'status' => Constants::$ORDER_ACCEPTED,
+            'status' => OrderStatus::ACCEPTED->value,
         ]);
 
         return $this->ticketService->generateAndSendTicket($orderId);

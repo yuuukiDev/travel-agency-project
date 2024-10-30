@@ -27,9 +27,9 @@ class TourImageController extends Controller
 
     public function update(TourImageRequest $request, Tour $tour, $tour_image_id)
     {
-                
+
         return $this->successResponse(
-            $this->tourImageService->update($request->validated(), $tour->id, $tour_image_id), 
+            $this->tourImageService->update($request->validated(), $tour->id, $tour_image_id),
             'Tour image updated successfully!'
         );
     }
@@ -37,8 +37,8 @@ class TourImageController extends Controller
     public function destroy(Tour $tour, $tour_image_id): JsonResponse
     {
         return $this->successResponse(
-            $this->tourImageService->delete(['tour_image_id' => $tour_image_id], $tour->id), 
+            $this->tourImageService->delete(['tour_image_id' => $tour_image_id], $tour->id),
             'Image deleted successfully from the tour'
-        );    
+        );
     }
 }

@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Enums\UserStatus;
 use App\Models\Role;
 use App\Models\User;
-use App\Utils\Constants;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -61,7 +61,7 @@ class CreateUserCommand extends Command
                 'name' => $user['name'],
                 'email' => $user['email'],
                 'password' => bcrypt($user['password']),
-                'is_active' => Constants::$USER_IS_ACTIVE,
+                'is_active' => UserStatus::ACTIVE->value,
             ]);
             $newUser->roles()->attach($role->id);
         });

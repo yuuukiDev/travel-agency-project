@@ -15,8 +15,14 @@ class TravelController extends Controller
      */
     public function index()
     {
-        $travels = Travel::public()->with('tours')->paginate();
+        $travels = Travel::public()
+            ->with('tours')
+            ->paginate();
 
-        return $this->successResponse(TravelResource::collection($travels), "There's all the travels!!");
+        return $this->successResponse(
+            TravelResource::collection(
+                $travels),
+            "There's all the travels!!"
+        );
     }
 }
