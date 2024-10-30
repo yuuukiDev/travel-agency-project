@@ -9,14 +9,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TourImage extends Model
 {
-    use SoftDeletes, HasUuids;
-
+    use HasUuids, SoftDeletes;
 
     protected $fillable = [
         'tour_id',
-        'image_path'
+        'image_path',
     ];
-
 
     public function tour(): BelongsTo
     {

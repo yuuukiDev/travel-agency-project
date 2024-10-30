@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
+use App\Mail\TicketMail;
 use App\Models\Order;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\TicketMail;
 
 class TicketService
 {
@@ -25,7 +25,7 @@ class TicketService
             'userName' => $order->user->name,
             'tourDetails' => $order->items,
             'totalQuantity' => $order->items->sum('qty'),
-            'orderId' => $orderId
+            'orderId' => $orderId,
         ];
     }
 
@@ -46,6 +46,6 @@ class TicketService
 
         $pdf = Pdf::loadView('mail.ticket', $data);
 
-        return $pdf->download('ticket_' . $data['ticketId'] . '.pdf');
+        return $pdf->download('ticket_'.$data['ticketId'].'.pdf');
     }
 }

@@ -10,13 +10,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Cart extends Model
 {
-    use SoftDeletes, HasUuids;
-
+    use HasUuids, SoftDeletes;
 
     protected $fillable = [
-        'user_id'
+        'user_id',
     ];
-
 
     public function user(): BelongsTo
     {
@@ -30,6 +28,6 @@ class Cart extends Model
 
     public function getTotalAttribute()
     {
-        return $this->items->sum(fn($item) => $this->total);
+        return $this->items->sum(fn ($item) => $this->total);
     }
 }

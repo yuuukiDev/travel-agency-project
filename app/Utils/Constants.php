@@ -25,10 +25,11 @@ class Constants
 
     public static $USER_BLOCKED = 2;
 
-
     // Order Status
 
     public static $ORDER_PENDING = 0;
+
     public static $ORDER_ACCEPTED = 1;
+
     public static $ORDER_CANCELED = 2;
 }

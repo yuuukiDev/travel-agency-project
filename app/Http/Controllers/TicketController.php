@@ -20,7 +20,8 @@ class TicketController extends Controller
     {
         try {
             $data = $this->ticketService->generateAndSendTicket($orderId);
-            return $this->successResponse($data, "Ticket generated and sent successfully");
+
+            return $this->successResponse($data, 'Ticket generated and sent successfully');
         } catch (\Exception $e) {
             return $this->failedResponse($e->getMessage());
         }

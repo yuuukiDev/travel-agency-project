@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -12,14 +11,16 @@ use Illuminate\Queue\SerializesModels;
 class TicketMail extends Mailable
 {
     use Queueable, SerializesModels;
-    
+
     public $ticketId;
+
     public $userName;
+
     public $tourDetails;
+
     public $totalQuantity;
 
     public $orderId;
-
 
     /**
      * Create a new message instance.

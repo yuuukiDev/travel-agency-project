@@ -23,9 +23,8 @@ class TourImageController extends Controller
 
     public function store(TourImageRequest $request, Tour $tour): JsonResponse
     {
-        return $this->successResponse($this->tourImageService->upload($request->validated(), $tour->id), 'Tour image uploaded successfully!');    
+        return $this->successResponse($this->tourImageService->upload($request->validated(), $tour->id), 'Tour image uploaded successfully!');
     }
-    
 
     public function update(TourImageRequest $request, $tour_id, $tour_image_id)
     {

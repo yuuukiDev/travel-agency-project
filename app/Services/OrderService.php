@@ -1,7 +1,7 @@
 <?php
+
 namespace App\Services;
 
-use App\Services\TicketService;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -10,13 +10,13 @@ use Illuminate\Support\Facades\DB;
 
 class OrderService
 {
-
     private TicketService $ticketService;
 
     public function __construct(TicketService $ticketService)
     {
         $this->ticketService = $ticketService;
     }
+
     public function confirm($cartId, $userId)
     {
         DB::beginTransaction();
@@ -33,12 +33,15 @@ class OrderService
                 OrderItem::create([
                     'order_id' => $order->id,
                     'tour_id' => $item->tour_id,
+                    'tour_name' => $item->tour->name,
+                    'tour_image' => $item->tour->tourImages()->first()->image_path,
                     'qty' => $item->qty,
-                    'price' => $item->total,
+                    'price' => $item->tour->price,
+                    'sub_total' => $item->total,
                 ]);
             }
             DB::commit();
-            
+
             return $order;
 
         } catch (\Exception $e) {
@@ -52,7 +55,7 @@ class OrderService
         $order = Order::findOrFail($orderId);
 
         $order->update([
-            'status' => Constants::$ORDER_ACCEPTED
+            'status' => Constants::$ORDER_ACCEPTED,
         ]);
 
         return $this->ticketService->generateAndSendTicket($orderId);

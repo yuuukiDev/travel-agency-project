@@ -22,7 +22,7 @@ class TourImageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'image' => ['required', 'image']
+            'image' => ['required', 'image'],
         ];
     }
 }

@@ -10,34 +10,33 @@ class TourImageService
     /**
      * Create a new class instance.
      */
-
-     private function createImage($image, $tourId)
-     {
+    private function createImage($image, $tourId)
+    {
         $path = $image->store('tour_images', 'public');
 
         return TourImage::create([
             'tour_id' => $tourId,
-            'image_path' => $path
+            'image_path' => $path,
         ]);
-     }
+    }
 
-     private function updateImage(TourImage $tourImage, $image)
-     {
+    private function updateImage(TourImage $tourImage, $image)
+    {
         $newImagePath = $image->store('tour_images', 'public');
 
         $tourImage->update(['image_path' => $newImagePath]);
 
         return $tourImage;
-     }
+    }
 
-     private function findAndDeleteImage(array $data, $tourId): TourImage
-     {
-         $tourImage = TourImage::where('tour_id', $tourId)->findOrFail($data['tour_image_id']);
+    private function findAndDeleteImage(array $data, $tourId): TourImage
+    {
+        $tourImage = TourImage::where('tour_id', $tourId)->findOrFail($data['tour_image_id']);
 
-         Storage::disk('public')->delete($tourImage->image_path);
+        Storage::disk('public')->delete($tourImage->image_path);
 
-         return $tourImage;
-     }
+        return $tourImage;
+    }
 
     public function upload($data, $tourId)
     {
@@ -50,8 +49,6 @@ class TourImageService
 
         return $this->updateImage($tourImage, $data['image']);
     }
-
-    
 
     public function delete($data, $tourId)
     {

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Services\OrderService;
@@ -7,6 +8,7 @@ use App\Utils\APIResponder;
 class OrderController extends Controller
 {
     use APIResponder;
+
     private OrderService $orderService;
 
     public function __construct(OrderService $orderService)
@@ -19,7 +21,7 @@ class OrderController extends Controller
      */
     public function confirm($cartId)
     {
-        $this->successResponse($this->orderService->confirm($cartId, auth()->id()), "Order Confirmed");
+        return $this->successResponse($this->orderService->confirm($cartId, auth()->id()), 'Order Confirmed');
     }
 
     /**
@@ -27,6 +29,6 @@ class OrderController extends Controller
      */
     public function accept($orderId)
     {
-        $this->successResponse($this->orderService->accept($orderId), "Order Accepted");
+        return $this->successResponse($this->orderService->accept($orderId), 'Order Accepted');
     }
 }

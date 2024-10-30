@@ -15,11 +15,11 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('order_id')->nullable()->constrained('orders')->cascadeOnDelete();
             $table->foreignUuid('tour_id')->nullable()->constrained('tours')->cascadeOnDelete();
-            $table->string("tour_name")->nullable();
-            $table->string("tour_image")->nullable();
-            $table->unsignedBigInteger("qty")->nullable();
-            $table->double("price", 8, 2)->nullable();
-            $table->double("sub_total", 8, 2)->nullable();
+            $table->string('tour_name')->nullable();
+            $table->string('tour_image')->nullable();
+            $table->unsignedBigInteger('qty')->nullable();
+            $table->double('price', 8, 2)->nullable();
+            $table->double('sub_total', 8, 2)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

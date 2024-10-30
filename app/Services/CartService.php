@@ -11,59 +11,64 @@ class CartService
     /**
      * Create a new class instance.
      */
-
-     private function incrementOrCreateItem($item, $cartId, $tourId, $qty)
-     {
-        if($item) {
+    private function incrementOrCreateItem($item, $cartId, $tourId, $qty)
+    {
+        if ($item) {
 
             $item->increment('qty', $qty);
-            
-            } else {
+
+            return $item;
+
+        } else {
             CartItem::create([
                 'cart_id' => $cartId,
                 'tour_id' => $tourId,
-                'qty' => $qty
+                'qty' => $qty,
             ]);
         }
-     }
-     public function showAllCarts($userId)
-     {
-        return Cart::with('items')->where('user_id', $userId)->first();
-     }
+    }
 
-     public function addItemToCart($userId, $data, $travel, $tour)
-     { 
+    public function showAllCarts($userId)
+    {
+        return Cart::with('items')->where('user_id', $userId)->first();
+    }
+
+    public function addItemToCart($userId, $data, $travel, $tour)
+    {
         try {
             DB::beginTransaction();
 
             $cart = Cart::firstOrCreate(['user_id' => $userId]);
 
             $item = CartItem::where('cart_id', $cart->id)
-            ->where('tour_id', $tour)
-            ->first();
+                ->where('tour_id', $tour)
+                ->first();
 
-            $this->incrementOrCreateItem($item, $cart->id, $tour, $data['qty']);
+            $cartItem = $this->incrementOrCreateItem($item, $cart->id, $tour, $data['qty']);
 
-        DB::commit();
+            DB::commit();
+
+            return $cartItem;
+
         } catch (\Exception $e) {
             DB::rollBack();
             throw $e;
         }
-     }
+    }
 
-     public function updateItem($data, $cartItemId)
-     {
+    public function updateItem($data, $cartItemId)
+    {
         $item = CartItem::findOrFail($cartItemId);
 
         $item->update([
-            'qty' => $data['qty']
+            'qty' => $data['qty'],
         ]);
 
         return $item;
-     }
+    }
 
-     public function deleteItem($cartItemId)
-     {
+    public function deleteItem($cartItemId)
+    {
         CartItem::findOrFail($cartItemId)->delete();
-     }
+    }
 }

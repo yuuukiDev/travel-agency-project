@@ -9,12 +9,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CartItem extends Model
 {
-    use SoftDeletes, HasUuids;
+    use HasUuids, SoftDeletes;
 
     protected $fillable = [
         'cart_id',
         'tour_id',
-        'qty'
+        'qty',
     ];
 
     public function cart(): BelongsTo

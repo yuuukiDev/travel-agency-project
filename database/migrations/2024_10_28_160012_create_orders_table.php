@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->nullable()->constrained('users')->cascadeOnDelete();
-            $table->tinyInteger("status")->default(Constants::$ORDER_PENDING);
+            $table->tinyInteger('status')->default(Constants::$ORDER_PENDING);
             $table->timestamps();
             $table->softDeletes();
         });

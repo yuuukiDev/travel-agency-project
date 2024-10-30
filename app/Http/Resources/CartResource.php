@@ -19,12 +19,13 @@ class CartResource extends JsonResource
             'name' => auth()->user()->name,
             'items' => $this->items->map(function ($item) {
                 $tour = $item->tour;
+
                 return [
-                    'tour_name' => $tour->name,
                     'travel_name' => $tour->travel->name,
+                    'tour_name' => $tour->name,
                     'price' => $tour->price,
                     'qty' => $item->qty,
-                    'total_price' => $item->total
+                    'total_price' => $item->total,
                 ];
             }),
         ];
