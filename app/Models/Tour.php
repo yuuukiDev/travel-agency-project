@@ -13,7 +13,6 @@ class Tour extends Model
     use HasUuids, SoftDeletes;
 
     //
-
     protected $fillable = [
         'travel_id',
         'name',

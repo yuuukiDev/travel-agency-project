@@ -22,8 +22,7 @@ class TourImageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'tour_id' => ['required', 'exists:tours,uuid'],
-            'image_path' => ['required', 'image']
+            'image' => ['required', 'image']
         ];
     }
 }

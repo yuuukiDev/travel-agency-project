@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TourImageRequest;
-use App\Http\Requests\UpdateTourImageRequest;
+use App\Models\Tour;
 use App\Services\TourImageService;
 use App\Utils\APIResponder;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class TourImageController extends Controller
 {
@@ -20,18 +21,19 @@ class TourImageController extends Controller
         $this->tourImageService = $tourImageService;
     }
 
-    public function store(TourImageRequest $request): JsonResponse
+    public function store(TourImageRequest $request, Tour $tour): JsonResponse
     {
-        return $this->successResponse($this->tourImageService->upload($request->validated()), 'Tour image uploaded successfully!');
+        return $this->successResponse($this->tourImageService->upload($request->validated(), $tour->id), 'Tour image uploaded successfully!');    
+    }
+    
+
+    public function update(TourImageRequest $request, $tour_id, $tour_image_id)
+    {
+        return $this->successResponse($this->tourImageService->update($tour_id, $tour_image_id, $request->validated()), 'Tour image updated successfully!');
     }
 
-    public function update(UpdateTourImageRequest $request)
+    public function destroy(Request $request): JsonResponse
     {
-        return $this->successResponse($this->tourImageService->update($request->validated()), 'Tour image updated successfully!');
-    }
-
-    public function destroy($id): JsonResponse
-    {
-        return $this->successResponse($this->tourImageService->delete($id), 'Image deleted successfully from the tour');
+        return $this->successResponse($this->tourImageService->delete($tourId), 'Image deleted successfully from the tour');
     }
 }

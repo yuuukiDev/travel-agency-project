@@ -47,12 +47,13 @@ Route::middleware('auth:api')->group(function () {
     });
 
     // cart routes
-
     Route::controller(CartController::class)->group(function(){
-        Route::post('/carts', 'store');
-        Route::put('/carts/{cart}', 'update');
-        Route::delete('/carts/{cart}', 'destroy');
+        Route::get('/carts', 'index');
+        Route::post('/travels/{travel}/tours/{tour}', 'store');
+        Route::put('/carts/items/{cartItem}', 'update');
+        Route::delete('/carts/items/{cartItem}', 'destroy');
     });
+
 });
 
 
@@ -76,12 +77,15 @@ Route::prefix('admin')
             Route::delete('travels/{travel}/tours', 'destroy');
         });
 
-        // problem here
-        Route::controller(App\Http\Controllers\Admin\TourImageController::class)->group(function () {
-            Route::post('travels/{travel}/tours/images', 'store');
-            Route::put('travels/{travel}/tours/images/{image}', 'update');
-            Route::delete('travels/{travel}/tours/images/{image}', 'destroy');
-        });
+        // something wrong with this!
+
+        // Route::controller(App\Http\Controllers\Admin\TourImageController::class)->group(function () {
+        //     Route::post('tours/{tour}/images', 'store'); // working
+        //     Route::put('tours/{tour}/images/{tour_image_id}', 'update'); // not working
+        //     Route::delete('tours/{tour}/images/{tour_image_id}', 'destroy'); // not working
+        // });
+
+
     });
 
 // editor endpoints
@@ -97,3 +101,5 @@ Route::prefix('editor')
         Route::put('travels/{travel}/tours', [App\Http\Controllers\Admin\TourController::class, 'update']);
 
     });
+
+    

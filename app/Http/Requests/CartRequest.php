@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateTourImageRequest extends FormRequest
+class CartRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +22,7 @@ class UpdateTourImageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'tour_image_id' => ['required', 'exists:tours_images,uuid'],
-            'image_path' => ['required', 'image']
+            "qty" =>  ["required", "integer", "min:1"]
         ];
     }
 }
