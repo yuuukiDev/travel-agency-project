@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Exceptions;
 
 use Exception;
 
-class UserStatusException extends Exception
+final class UserStatusException extends Exception
 {
     /**
      * Create a new class instance.

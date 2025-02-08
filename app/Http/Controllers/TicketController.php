@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Services\TicketService;
 use App\Utils\APIResponder;
+use Exception;
 
-class TicketController extends Controller
+final class TicketController extends Controller
 {
     use APIResponder;
 
@@ -27,7 +30,7 @@ class TicketController extends Controller
                 'Ticket generated and sent successfully'
             );
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->failedResponse($e->getMessage());
         }
     }

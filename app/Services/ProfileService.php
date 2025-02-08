@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Exceptions\PasswordException;
@@ -9,35 +11,8 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
-class ProfileService
+final class ProfileService
 {
-    /**
-     * Create a new class instance.
-     */
-    private function handleAvatarUpdate($user, $avatar) // not working
-    {
-        $avatarPath = $avatar->store('avatars', 'public');
-
-        if ($user->avatar) {
-            Storage::disk('public')->delete($user->avatar);
-        }
-
-        $user->update(['avatar' => $avatarPath]);
-    }
-
-    private function changePassword($user, $data)
-    {
-        if ($data['current_password'] === $data['password']) {
-            throw PasswordException::sameAsCurrent();
-        }
-
-        if (! Hash::check($data['current_password'], $user->password)) {
-            throw PasswordException::incorrect();
-        }
-        $user->update(['password' => Hash::make($data['password'])]);
-
-    }
-
     public function updateProfile($data, $user)
     {
 
@@ -69,5 +44,32 @@ class ProfileService
         $user->notify(new UserDeletedNotification(config('app.admin_email')));
 
         return $user;
+    }
+
+    /**
+     * Create a new class instance.
+     */
+    private function handleAvatarUpdate($user, $avatar) // not working
+    {
+        $avatarPath = $avatar->store('avatars', 'public');
+
+        if ($user->avatar) {
+            Storage::disk('public')->delete($user->avatar);
+        }
+
+        $user->update(['avatar' => $avatarPath]);
+    }
+
+    private function changePassword($user, $data)
+    {
+        if ($data['current_password'] === $data['password']) {
+            throw PasswordException::sameAsCurrent();
+        }
+
+        if (! Hash::check($data['current_password'], $user->password)) {
+            throw PasswordException::incorrect();
+        }
+        $user->update(['password' => Hash::make($data['password'])]);
+
     }
 }

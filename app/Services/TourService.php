@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Http\Requests\ToursListRequest;
 use App\Models\Travel;
 
-class TourService
+final class TourService
 {
     public function filterTours(Travel $travel, ToursListRequest $request)
     {

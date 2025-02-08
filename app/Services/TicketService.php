@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Mail\TicketMail;
@@ -7,7 +9,7 @@ use App\Models\Order;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
 
-class TicketService
+final class TicketService
 {
     public function sendEmail($ticketId, $userName, $tourDetails, $totalQuantity, $orderId)
     {
@@ -26,7 +28,7 @@ class TicketService
     {
         $order = Order::with('items.tour', 'user')->findOrFail($orderId);
 
-        $ticketId = strtoupper(uniqid('TKT'));
+        $ticketId = mb_strtoupper(uniqid('TKT'));
 
         return [
             'ticketId' => $ticketId,

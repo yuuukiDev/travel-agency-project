@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Utils;
 
 use App\Enums\ApiResponse;
@@ -23,7 +25,7 @@ trait APIResponder
     {
         return response()->json([
             'status' => ApiResponse::FAILED_STATUS->value,
-            'message' => $message ?? APIResponse::FAILED_MESSAGE->value,
+            'message' => $message ?? ApiResponse::FAILED_MESSAGE->value,
         ], $code);
     }
 }

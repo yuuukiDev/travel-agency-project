@@ -1,33 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Models\Cart;
 use App\Models\CartItem;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
-class CartService
+final class CartService
 {
-    /**
-     * Create a new class instance.
-     */
-    private function incrementOrCreateItem($item, $cartId, $tourId, $qty)
-    {
-        if ($item) {
-
-            $item->increment('qty', $qty);
-
-            return $item;
-
-        } else {
-            return CartItem::create([
-                'cart_id' => $cartId,
-                'tour_id' => $tourId,
-                'qty' => $qty,
-            ]);
-        }
-    }
-
     public function showAllCarts($userId)
     {
         return Cart::with('items')
@@ -57,7 +40,7 @@ class CartService
 
             return $cartItem;
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             throw $e;
         }
@@ -77,5 +60,26 @@ class CartService
     public function deleteItem($cartItemId)
     {
         CartItem::findOrFail($cartItemId)->delete();
+    }
+
+    /**
+     * Create a new class instance.
+     */
+    private function incrementOrCreateItem($item, $cartId, $tourId, $qty)
+    {
+        if ($item) {
+
+            $item->increment('qty', $qty);
+
+            return $item;
+
+        }
+
+        return CartItem::create([
+            'cart_id' => $cartId,
+            'tour_id' => $tourId,
+            'qty' => $qty,
+        ]);
+
     }
 }

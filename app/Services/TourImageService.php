@@ -1,12 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Models\TourImage;
 use Illuminate\Support\Facades\Storage;
 
-class TourImageService
+final class TourImageService
 {
+    public function upload($data, $tourId)
+    {
+        return $this->createImage($data['image'], $tourId);
+    }
+
+    public function update($data, $tourId, $tourImageId)
+    {
+        $tourImage = $this->findAndDeleteImage(['tour_image_id' => $tourImageId], $tourId);
+
+        return $this->updateImage($tourImage, $data['image']);
+    }
+
+    public function delete($data, $tourId)
+    {
+        $tourImage = $this->findAndDeleteImage($data, $tourId);
+
+        $tourImage->delete();
+    }
+
     /**
      * Create a new class instance.
      */
@@ -36,24 +57,5 @@ class TourImageService
         Storage::disk('public')->delete($tourImage->image_path);
 
         return $tourImage;
-    }
-
-    public function upload($data, $tourId)
-    {
-        return $this->createImage($data['image'], $tourId);
-    }
-
-    public function update($data, $tourId, $tourImageId)
-    {
-        $tourImage = $this->findAndDeleteImage(['tour_image_id' => $tourImageId], $tourId);
-
-        return $this->updateImage($tourImage, $data['image']);
-    }
-
-    public function delete($data, $tourId)
-    {
-        $tourImage = $this->findAndDeleteImage($data, $tourId);
-
-        $tourImage->delete();
     }
 }

@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Services\OrderService;
 use App\Utils\APIResponder;
 
-class OrderController extends Controller
+final class OrderController extends Controller
 {
     use APIResponder;
 

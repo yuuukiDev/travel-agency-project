@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Http\Resources\TravelResource;
 use App\Models\Travel;
 use App\Utils\APIResponder;
 
-class TravelController extends Controller
+final class TravelController extends Controller
 {
     use APIResponder;
 

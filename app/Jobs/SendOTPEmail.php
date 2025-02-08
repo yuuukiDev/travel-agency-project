@@ -1,13 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs;
 
 use App\Mail\VerificationMail;
+use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Mail;
+use Log;
 
-class SendOTPEmail implements ShouldQueue
+final class SendOTPEmail implements ShouldQueue
 {
     use Queueable;
 
@@ -34,8 +38,8 @@ class SendOTPEmail implements ShouldQueue
         Mail::to($this->email)->send(new VerificationMail($this->otp));
     }
 
-    public function failed(\Exception $exception)
+    public function failed(Exception $exception)
     {
-        \Log::error("Failed to send OTP email to {$this->email}: ".$exception->getMessage());
+        Log::error("Failed to send OTP email to {$this->email}: ".$exception->getMessage());
     }
 }

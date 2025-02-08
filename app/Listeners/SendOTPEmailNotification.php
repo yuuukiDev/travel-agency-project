@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Listeners;
 
 use App\Events\UserVerificationRequested;
 use App\Jobs\SendOTPEmail;
 
-class SendOTPEmailNotification
+final class SendOTPEmailNotification
 {
     /**
      * Create the event listener.

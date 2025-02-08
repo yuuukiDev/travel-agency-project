@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Enums\UserStatus;
@@ -10,61 +12,8 @@ use App\Models\User;
 use App\Notifications\PasswordChangedNotification;
 use Illuminate\Support\Facades\Hash;
 
-class AuthService
+final class AuthService
 {
-    /**
-     * Create a new class instance.
-     */
-    private function generateAccessToken(User $user)
-    {
-        return $user->createToken('Personal Access Token')->plainTextToken;
-    }
-
-    private function deleteAccessTokens(User $user)
-    {
-        $user->tokens()->delete();
-    }
-
-    private function findUserByEmail($email)
-    {
-        return User::whereEmail($email)->firstOrFail();
-    }
-
-    private function validateUserCredentials($data)
-    {
-        $user = $this->findUserByEmail($data['email']);
-
-        if (! Hash::check($data['password'], $user->password)) {
-            throw PasswordException::incorrect();
-        }
-
-        $this->ensureUserIsActive($user);
-
-        return $user;
-    }
-
-    private function findUserByEmailAndOTP($data)
-    {
-        return $this->findUserByEmail($data['email'])
-            ->whereVerificationCode($data['code'])
-            ->firstOrFail();
-    }
-
-    private function ensureUserIsActive(User $user)
-    {
-        if ($user->is_active != UserStatus::ACTIVE->value) {
-            throw UserStatusException::notActiveOrBlocked();
-        }
-    }
-
-    private function respondWithUserAndToken(User $user)
-    {
-        return [
-            'user' => $user,
-            'access_token' => $this->generateAccessToken($user),
-        ];
-    }
-
     public function register($data)
     {
         $user = User::create($data);
@@ -132,5 +81,58 @@ class AuthService
     public function logout($user)
     {
         return $this->deleteAccessTokens($user);
+    }
+
+    /**
+     * Create a new class instance.
+     */
+    private function generateAccessToken(User $user)
+    {
+        return $user->createToken('Personal Access Token')->plainTextToken;
+    }
+
+    private function deleteAccessTokens(User $user)
+    {
+        $user->tokens()->delete();
+    }
+
+    private function findUserByEmail($email)
+    {
+        return User::whereEmail($email)->firstOrFail();
+    }
+
+    private function validateUserCredentials($data)
+    {
+        $user = $this->findUserByEmail($data['email']);
+
+        if (! Hash::check($data['password'], $user->password)) {
+            throw PasswordException::incorrect();
+        }
+
+        $this->ensureUserIsActive($user);
+
+        return $user;
+    }
+
+    private function findUserByEmailAndOTP($data)
+    {
+        return $this->findUserByEmail($data['email'])
+            ->whereVerificationCode($data['code'])
+            ->firstOrFail();
+    }
+
+    private function ensureUserIsActive(User $user)
+    {
+        if ($user->is_active !== UserStatus::ACTIVE->value) {
+            throw UserStatusException::notActiveOrBlocked();
+        }
+    }
+
+    private function respondWithUserAndToken(User $user)
+    {
+        return [
+            'user' => $user,
+            'access_token' => $this->generateAccessToken($user),
+        ];
     }
 }

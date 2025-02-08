@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
@@ -10,7 +12,7 @@ use App\Models\Travel;
 use App\Utils\APIResponder;
 use Illuminate\Http\JsonResponse;
 
-class TourController extends Controller
+final class TourController extends Controller
 {
     use APIResponder;
 

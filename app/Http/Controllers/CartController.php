@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CartRequest;
@@ -7,7 +9,7 @@ use App\Http\Resources\CartResource;
 use App\Services\CartService;
 use App\Utils\APIResponder;
 
-class CartController extends Controller
+final class CartController extends Controller
 {
     use APIResponder;
 

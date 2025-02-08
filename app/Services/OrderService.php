@@ -1,14 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Enums\OrderStatus;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
-class OrderService
+final class OrderService
 {
     private TicketService $ticketService;
 
@@ -44,7 +47,7 @@ class OrderService
 
             return $order;
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             throw $e;
         }

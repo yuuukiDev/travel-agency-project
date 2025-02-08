@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ToursListRequest;
@@ -8,7 +10,7 @@ use App\Models\Travel;
 use App\Services\TourService;
 use App\Utils\APIResponder;
 
-class TourController extends Controller
+final class TourController extends Controller
 {
     use APIResponder;
 
