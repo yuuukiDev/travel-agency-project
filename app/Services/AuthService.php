@@ -10,17 +10,25 @@ use App\Exceptions\PasswordException;
 use App\Exceptions\UserStatusException;
 use App\Models\User;
 use App\Notifications\PasswordChangedNotification;
+use App\Repositories\AuthRepository;
 use Illuminate\Support\Facades\Hash;
 
 final class AuthService
 {
-    public function register($data)
+    public function __construct(
+        private readonly AuthRepository $authRepository,
+        private readonly TokenManager $tokenManager
+    ){}
+    public function register(array $data): array
     {
-        $user = User::create($data);
+        $user = $this->authRepository->create($data);
 
         event(new UserVerificationRequested($user));
 
-        return $this->respondWithUserAndToken($user);
+        return [
+            'user' => $user,
+            'token' => $this->tokenManager->createToken($user),
+        ];
     }
 
     public function verify($data)
