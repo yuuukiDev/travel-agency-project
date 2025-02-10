@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('travels', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->boolean('is_public')->default(false);
-            $table->string('name')->nullable();
-            $table->string('slug')->nullable();
-            $table->longText('description')->nullable();
-            $table->integer('number_of_days')->nullable();
+            $table->boolean('is_public')->default(false)->index();
+            $table->string('name');
+            $table->string('slug')->unique()->index();
+            $table->longText('description');
+            $table->unsignedInteger('number_of_days')->index();
             $table->timestamps();
             $table->softDeletes();
         });
