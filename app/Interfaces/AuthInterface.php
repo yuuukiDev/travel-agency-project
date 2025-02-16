@@ -12,4 +12,7 @@ interface AuthInterface
     public function create(array $data): User;
 
     public function getUserByEmail(string $email): User;
+
+    public function findUserByEmailAndOTP(string $email, string $code): User;
+
 }

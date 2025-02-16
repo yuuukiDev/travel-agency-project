@@ -28,33 +28,56 @@ final class AuthService
 
         return [
             'user' => $user,
-            'token' => $this->tokenManager->createToken($user),
+            'token' => $this->tokenManager->generateAccessToken($user),
         ];
     }
 
-    public function verify($data)
+    public function verify(array $data): array
     {
-        $user = $this->findUserByEmailAndOTP($data);
+        $user = $this->authRepository->findUserByEmailAndOTP($data['email'], $data['code']);
 
         $user->update([
             'is_active' => UserStatus::ACTIVE->value,
             'verification_code' => null,
         ]);
 
-        return $this->respondWithUserAndToken($user);
+        return $this->tokenManager->respondWithUserAndToken($user);
     }
 
     public function login($data)
     {
-        return $this->respondWithUserAndToken(
+        return $this->tokenManager->respondWithUserAndToken(
             $this->validateUserCredentials(
                 $data
             ));
     }
-
-    public function forgetPassword($data)
+    public function logout($user)
     {
-        $user = $this->findUserByEmail($data['email']);
+        return $this->tokenManager->deleteAccessTokens($user);
+    }
+    private function validateUserCredentials($data)
+    {
+        $user = $this->authRepository->getUserByEmail($data['email']);
+
+        if (! Hash::check($data['password'], $user->password)) {
+            throw PasswordException::incorrect();
+        }
+
+        $this->ensureUserIsActive($user);
+
+        return $user;
+    }
+    private function ensureUserIsActive(User $user)
+    {
+        if ($user->is_active !== UserStatus::ACTIVE->value) {
+            throw UserStatusException::notActiveOrBlocked();
+        }
+    }
+
+
+    public function forgetPassword(array $data): User
+    {
+        $user = $this->authRepository->getUserByEmail($data['email']);
 
         event(new UserVerificationRequested($user));
 
@@ -63,12 +86,11 @@ final class AuthService
 
     public function checkOTP($data)
     {
-        return $this->respondWithUserAndToken(
-            $this->findUserByEmailAndOTP(
-                $data)
+        return $this->tokenManager->respondWithUserAndToken(
+            $this->authRepository->findUserByEmailAndOTP(
+                $data['email'], $data['code'])
         );
     }
-
     public function resetPassword($data, $user)
     {
 
@@ -80,68 +102,10 @@ final class AuthService
             'password' => Hash::make($data['password']),
         ]);
 
-        $this->deleteAccessTokens($user);
+        $this->tokenManager->deleteAccessTokens($user);
 
         $user->notify(new PasswordChangedNotification(config('app.admin_email')));
 
         return $user;
-    }
-
-    public function logout($user)
-    {
-        return $this->deleteAccessTokens($user);
-    }
-
-    /**
-     * Create a new class instance.
-     */
-    private function generateAccessToken(User $user)
-    {
-        return $user->createToken('Personal Access Token')->plainTextToken;
-    }
-
-    private function deleteAccessTokens(User $user)
-    {
-        $user->tokens()->delete();
-    }
-
-    private function findUserByEmail($email)
-    {
-        return User::whereEmail($email)->firstOrFail();
-    }
-
-    private function validateUserCredentials($data)
-    {
-        $user = $this->findUserByEmail($data['email']);
-
-        if (! Hash::check($data['password'], $user->password)) {
-            throw PasswordException::incorrect();
-        }
-
-        $this->ensureUserIsActive($user);
-
-        return $user;
-    }
-
-    private function findUserByEmailAndOTP($data)
-    {
-        return $this->findUserByEmail($data['email'])
-            ->whereVerificationCode($data['code'])
-            ->firstOrFail();
-    }
-
-    private function ensureUserIsActive(User $user)
-    {
-        if ($user->is_active !== UserStatus::ACTIVE->value) {
-            throw UserStatusException::notActiveOrBlocked();
-        }
-    }
-
-    private function respondWithUserAndToken(User $user)
-    {
-        return [
-            'user' => $user,
-            'access_token' => $this->generateAccessToken($user),
-        ];
     }
 }

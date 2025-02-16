@@ -9,8 +9,19 @@ use App\Models\User;
 
 final class TokenManager
 {
-    public function createToken(User $user): string
+    public function generateAccessToken(User $user): string
     {
         return $user->createToken('Personal Access Token')->plainTextToken;
+    }
+    public function respondWithUserAndToken(User $user): array
+    {
+        return [
+            'user' => $user,
+            'access_token' => $this->generateAccessToken($user),
+        ];
+    }
+    public function deleteAccessTokens(User $user): void
+    {
+        $user->tokens()->delete();
     }
 }
