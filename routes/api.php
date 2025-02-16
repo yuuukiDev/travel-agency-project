@@ -17,45 +17,45 @@ use Illuminate\Support\Facades\Route;
 Route::get('travels', [TravelController::class, 'index']);
 Route::get('/travels/{travel:slug}/tours', [TourController::class, 'index']);
 
-    Route::middleware(['throttle:5,1'])
+Route::middleware(['throttle:5,1'])
     ->controller(AuthController::class)
     ->group(function (): void {
         Route::post('/register', 'register');
         Route::post('/login', 'login');
         Route::post('/logout', 'logout')->middleware('auth:api');
     });
-    Route::middleware(['throttle:5,1'])
+Route::middleware(['throttle:5,1'])
     ->controller(PasswordResetController::class)
     ->group(function (): void {
         Route::post('/forget-password', 'forgetPassword');
         Route::post('/reset-password', 'resetPassword')->middleware('auth:api');
 
     });
-    Route::middleware('auth:api')
+Route::middleware('auth:api')
     ->post('/verify', VerifyController::class);
 
-    // Profile routes
+// Profile routes
 
-    Route::controller(ProfileController::class)->group(function () {
-        Route::post('/profile', 'update');
-        Route::delete('/profiles/{profile}', 'destroy');
-    });
+Route::controller(ProfileController::class)->group(function () {
+    Route::post('/profile', 'update');
+    Route::delete('/profiles/{profile}', 'destroy');
+});
 
 //     // Cart routes
 
-    Route::controller(CartController::class)->group(function () {
-        Route::get('/carts', 'index');
-        Route::post('/travels/{travel}/tours/{tour}', 'store');
-        Route::put('/carts/items/{cartItem}', 'update');
-        Route::delete('/carts/items/{cartItem}', 'destroy');
-    });
+Route::controller(CartController::class)->group(function () {
+    Route::get('/carts', 'index');
+    Route::post('/travels/{travel}/tours/{tour}', 'store');
+    Route::put('/carts/items/{cartItem}', 'update');
+    Route::delete('/carts/items/{cartItem}', 'destroy');
+});
 
 //     // Order routes
 
-    Route::controller(OrderController::class)->group(function () {
-        Route::post('orders/{cartId}/confirm', 'confirm');
-        Route::post('/orders/{orderId}/accept', 'accept');
-    });
+Route::controller(OrderController::class)->group(function () {
+    Route::post('orders/{cartId}/confirm', 'confirm');
+    Route::post('/orders/{orderId}/accept', 'accept');
+});
 
 // // admin endpoints
 

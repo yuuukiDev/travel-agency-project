@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 final class Tour extends Model
 {
-    use HasUuids, SoftDeletes, Sluggable;
+    use HasUuids, Sluggable, SoftDeletes;
 
     //
     protected $fillable = [

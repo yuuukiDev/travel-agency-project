@@ -1,6 +1,5 @@
 <?php
 
-
 declare(strict_types=1);
 
 namespace App\Services\Auth;
@@ -13,6 +12,7 @@ final class TokenManager
     {
         return $user->createToken('Personal Access Token')->plainTextToken;
     }
+
     public function respondWithUserAndToken(User $user): array
     {
         return [
@@ -20,6 +20,7 @@ final class TokenManager
             'access_token' => $this->generateAccessToken($user),
         ];
     }
+
     public function deleteAccessTokens(User $user): void
     {
         $user->tokens()->delete();

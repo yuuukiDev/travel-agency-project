@@ -1,6 +1,5 @@
 <?php
 
-
 declare(strict_types=1);
 
 namespace App\Interfaces;
@@ -14,5 +13,4 @@ interface AuthInterface
     public function getUserByEmail(string $email): User;
 
     public function findUserByEmailAndOTP(string $email, string $code): User;
-
 }

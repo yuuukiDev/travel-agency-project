@@ -12,7 +12,8 @@ final class VerificationService
     public function __construct(
         private readonly AuthRepository $authRepository,
         private readonly TokenManager $tokenManager
-    ){}
+    ) {}
+
     public function verify(array $data): array
     {
         $user = $this->authRepository->findUserByEmailAndOTP($data['email'], $data['code']);
@@ -21,7 +22,7 @@ final class VerificationService
             'is_active' => UserStatus::ACTIVE->value,
             'verification_code' => null,
         ]);
-        
+
         return $this->tokenManager->respondWithUserAndToken($user);
     }
 }

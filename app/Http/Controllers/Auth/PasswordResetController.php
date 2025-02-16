@@ -18,7 +18,8 @@ final class PasswordResetController extends Controller
 
     public function __construct(
         private readonly PasswordResetService $passwordResetService,
-    ){}
+    ) {}
+
     public function forgetPassword(ForgetPasswordRequest $request): JsonResponse
     {
 
@@ -28,13 +29,14 @@ final class PasswordResetController extends Controller
             AuthMessages::FORGOT_PASSWORD->value
         );
     }
+
     public function resetPassword(PasswordValidationRequest $request): JsonResponse
     {
         return $this->successResponse(
             $this->passwordResetService->resetPassword(
                 $request->validated(),
                 auth()->user()),
-                 AuthMessages::RESET_PASSWORD->value
+            AuthMessages::RESET_PASSWORD->value
         );
     }
 }

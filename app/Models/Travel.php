@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 final class Travel extends Model
 {
-    use HasUuids, SoftDeletes, Sluggable;
+    use HasUuids, Sluggable, SoftDeletes;
     //
 
     protected $table = 'travels';

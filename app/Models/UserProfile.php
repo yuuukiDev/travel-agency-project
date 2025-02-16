@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class UserProfile extends Model
+final class UserProfile extends Model
 {
     use SoftDeletes;
     //
@@ -17,7 +19,7 @@ class UserProfile extends Model
         'last_name',
         'phone_number',
         'address',
-        'avatar'
+        'avatar',
     ];
 
     public function user(): BelongsTo

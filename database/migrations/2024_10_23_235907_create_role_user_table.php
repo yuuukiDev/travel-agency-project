@@ -15,13 +15,13 @@ return new class extends Migration
     {
         Schema::create('role_user', function (Blueprint $table) {
             $table->foreignUuid('user_id')
-            ->nullable()
-            ->constrained('users')
-            ->cascadeOnDelete();
+                ->nullable()
+                ->constrained('users')
+                ->cascadeOnDelete();
             $table->foreignUuid('role_id')
-            ->nullable()
-            ->constrained('roles')
-            ->cascadeOnDelete();
+                ->nullable()
+                ->constrained('roles')
+                ->cascadeOnDelete();
             $table->timestamps();
             $table->softDeletes();
         });

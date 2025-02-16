@@ -21,7 +21,8 @@ final class TravelController extends Controller
 
     public function __construct(
         private readonly TravelService $travelService
-    ){}
+    ) {}
+
     public function store(CreateTravelRequest $request): JsonResponse
     {
         return $this->successResponse(
@@ -29,19 +30,20 @@ final class TravelController extends Controller
                 $this->travelService->create(
                     TravelDTO::fromArray(
                         $request->validated()
-                        )
                     )
+                )
             ),
             TravelActions::CREATED->value
         );
     }
+
     public function update(UpdateTravelRequest $request, string $slug): JsonResponse
     {
         return $this->successResponse(
             new TravelResource(
                 $this->travelService->update(
                     $slug,
-                        $request->validated()
+                    $request->validated()
                 )
             ), TravelActions::UPDATED->value
         );

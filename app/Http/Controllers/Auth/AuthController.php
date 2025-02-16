@@ -19,7 +19,8 @@ final class AuthController extends Controller
 
     public function __construct(
         private readonly AuthService $authService,
-    ){}
+    ) {}
+
     public function register(CreateUserRequest $request): JsonResponse
     {
         return $this->successResponse(
@@ -31,21 +32,23 @@ final class AuthController extends Controller
             AuthMessages::REGISTERED->value
         );
     }
+
     public function login(LoginRequest $request): JsonResponse
     {
         return $this->successResponse(
             $this->authService->login(
                 $request->validated()),
-                AuthMessages::LOGGED_IN->value
-            );
+            AuthMessages::LOGGED_IN->value
+        );
     }
+
     public function logout(): JsonResponse
     {
 
         return $this->successResponse(
             $this->authService->logout(
                 auth()->user()),
-                AuthMessages::LOGGED_OUT->value
-            );
+            AuthMessages::LOGGED_OUT->value
+        );
     }
 }

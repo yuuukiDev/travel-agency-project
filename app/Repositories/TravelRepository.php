@@ -1,6 +1,5 @@
 <?php
 
-
 declare(strict_types=1);
 
 namespace App\Repositories;
@@ -10,7 +9,6 @@ use App\Models\Travel;
 
 final class TravelRepository implements TravelInterface
 {
-
     public function create(array $data): Travel
     {
         return Travel::create($data);

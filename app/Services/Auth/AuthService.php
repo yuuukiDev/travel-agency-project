@@ -16,10 +16,12 @@ use Illuminate\Support\Facades\Hash;
 final class AuthService
 {
     use APIResponder;
+
     public function __construct(
         private readonly AuthRepository $authRepository,
         private readonly TokenManager $tokenManager,
-    ){}
+    ) {}
+
     public function register(RegisterDTO $dto): array
     {
         $user = $this->authRepository->create($dto->toArray());
@@ -28,6 +30,7 @@ final class AuthService
 
         return $this->tokenManager->respondWithUserAndToken($user);
     }
+
     public function login(array $data): array
     {
         $user = $this->authRepository->getUserByEmail($data['email']);
@@ -38,20 +41,23 @@ final class AuthService
 
         return $this->tokenManager->respondWithUserAndToken($user);
     }
+
     public function logout(User $user): void
     {
         $this->tokenManager->deleteAccessTokens($user);
     }
-    private function ensureCredentialsIsValid(User $user, string $password): void
-    {
-        if (! Hash::check($password, $user->password)) {
-            abort(400, AuthMessages::INVALID_PASSWORD->value);  
-        }
-    }
+
     public function ensureUserIsActive(User $user): void
     {
         if ($user->is_active !== UserStatus::ACTIVE->value) {
-            abort(400, AuthMessages::USER_INACTIVE_OR_BLOCKED->value);  
+            abort(400, AuthMessages::USER_INACTIVE_OR_BLOCKED->value);
+        }
+    }
+
+    private function ensureCredentialsIsValid(User $user, string $password): void
+    {
+        if (! Hash::check($password, $user->password)) {
+            abort(400, AuthMessages::INVALID_PASSWORD->value);
         }
     }
 }

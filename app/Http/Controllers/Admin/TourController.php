@@ -20,7 +20,7 @@ final class TourController extends Controller
 
     public function __construct(
         private readonly TourService $tourService
-    ){}
+    ) {}
 
     public function store(CreateTourRequest $request, string $slug): JsonResponse
     {
@@ -35,17 +35,18 @@ final class TourController extends Controller
             TourActions::CREATED->value
         );
     }
-        public function update(string $travelSlug, string $tourSlug, UpdateTourRequest $request): JsonResponse
-        {
-            return $this->successResponse(
-                new TourResource(
-                    $this->tourService->update(
-                        $travelSlug, $tourSlug, $request->validated()
-                    )
-                ),
-                TourActions::UPDATED->value
-            );
-        }
+
+    public function update(string $travelSlug, string $tourSlug, UpdateTourRequest $request): JsonResponse
+    {
+        return $this->successResponse(
+            new TourResource(
+                $this->tourService->update(
+                    $travelSlug, $tourSlug, $request->validated()
+                )
+            ),
+            TourActions::UPDATED->value
+        );
+    }
 
     public function destroy(string $travelSlug, string $tourSlug): JsonResponse
     {

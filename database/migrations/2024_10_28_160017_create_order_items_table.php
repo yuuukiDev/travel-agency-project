@@ -16,13 +16,13 @@ return new class extends Migration
         Schema::create('order_items', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('order_id')
-            ->nullable()
-            ->constrained('orders')
-            ->cascadeOnDelete();
+                ->nullable()
+                ->constrained('orders')
+                ->cascadeOnDelete();
             $table->foreignUuid('tour_id')
-            ->nullable()
-            ->constrained('tours')
-            ->cascadeOnDelete();
+                ->nullable()
+                ->constrained('tours')
+                ->cascadeOnDelete();
             $table->string('tour_name')->nullable();
             $table->string('tour_image')->nullable();
             $table->unsignedBigInteger('qty')->nullable();

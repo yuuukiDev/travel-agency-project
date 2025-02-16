@@ -17,13 +17,14 @@ final class VerifyController extends Controller
 
     public function __construct(
         private readonly VerificationService $verificationService
-    ){}
+    ) {}
+
     public function __invoke(VerifyRequest $request): JsonResponse
     {
         return $this->successResponse(
             $this->verificationService->verify(
                 $request->validated()),
-                AuthMessages::VERIFIED->value
-            );
+            AuthMessages::VERIFIED->value
+        );
     }
 }

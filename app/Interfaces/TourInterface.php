@@ -1,6 +1,5 @@
 <?php
 
-
 declare(strict_types=1);
 
 namespace App\Interfaces;
@@ -15,5 +14,4 @@ interface TourInterface
     public function getTourBySlug(string $slug): Tour;
 
     public function getTravelAndTourBySlug(string $travelSlug, string $tourSlug): Tour;
-
 }

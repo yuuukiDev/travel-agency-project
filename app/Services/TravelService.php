@@ -7,17 +7,18 @@ namespace App\Services;
 use App\DTOs\TravelDTO;
 use App\Models\Travel;
 use App\Repositories\TravelRepository;
-use Illuminate\Database\Eloquent\Builder;
 
 final class TravelService
 {
     public function __construct(
         private readonly TravelRepository $travelRepository
-    ){}
+    ) {}
+
     public function create(TravelDTO $dto): Travel
     {
         return $this->travelRepository->create($dto->toArray());
     }
+
     public function update(string $slug, array $data): Travel
     {
         $travel = $this->travelRepository->getTravelBySlug($slug);
