@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\PasswordResetController;
+use App\Http\Controllers\Auth\VerifyController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
@@ -15,30 +17,23 @@ use Illuminate\Support\Facades\Route;
 Route::get('travels', [TravelController::class, 'index']);
 Route::get('/travels/{travel:slug}/tours', [TourController::class, 'index']);
 
-Route::middleware(['throttle:5,1'])
+    Route::middleware(['throttle:5,1'])
     ->controller(AuthController::class)
-    ->group(function () {
-
+    ->group(function (): void {
         Route::post('/register', 'register');
-
         Route::post('/login', 'login');
-
+        Route::post('/logout', 'logout')->middleware('auth:api');
+    });
+    Route::middleware(['throttle:5,1'])
+    ->controller(PasswordResetController::class)
+    ->group(function (): void {
         Route::post('/forget-password', 'forgetPassword');
+        Route::post('/reset-password', 'resetPassword')->middleware('auth:api');
 
     });
+    Route::middleware('auth:api')
+    ->post('/verify', VerifyController::class);    
 
-// authenticated endpoints
-
-Route::middleware('auth:api')->group(function () {
-
-    // Authentication routes
-
-    Route::controller(AuthController::class)->group(function () {
-        Route::post('/check-verification-code', 'checkVerificationCode');
-        Route::post('/register/verification/', 'verify')->middleware('throttle:5,1');
-        Route::post('/reset-password', 'resetPassword')->middleware('throttle:5,1');
-        Route::post('/logout', 'logout');
-    });
 
     // Profile routes
 
@@ -47,7 +42,7 @@ Route::middleware('auth:api')->group(function () {
         Route::delete('/profiles/{profile}', 'destroy');
     });
 
-    // Cart routes
+//     // Cart routes
 
     Route::controller(CartController::class)->group(function () {
         Route::get('/carts', 'index');
@@ -56,16 +51,14 @@ Route::middleware('auth:api')->group(function () {
         Route::delete('/carts/items/{cartItem}', 'destroy');
     });
 
-    // Order routes
+//     // Order routes
 
     Route::controller(OrderController::class)->group(function () {
         Route::post('orders/{cartId}/confirm', 'confirm');
         Route::post('/orders/{orderId}/accept', 'accept');
     });
 
-});
-
-// admin endpoints
+// // admin endpoints
 
 Route::prefix('admin')
     ->middleware(['auth:sanctum', 'role:admin'])
@@ -93,7 +86,7 @@ Route::prefix('admin')
 
     });
 
-// editor endpoints
+// // editor endpoints
 
 Route::prefix('editor')
     ->middleware(['auth:sanctum', 'role:editor'])

@@ -21,8 +21,8 @@ final class AuthRepository implements AuthInterface
     }
     public function findUserByEmailAndOTP(string $email, string $code): User
     {
-        return $this->getUserByEmail($email)
-            ->whereVerificationCode($code)
-            ->firstOrFail();
+        return User::where('email', $email)
+        ->where('verification_code', $code)
+        ->firstOrFail();
     }
 }
