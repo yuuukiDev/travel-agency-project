@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\DTOs\TravelDTO;
+use App\Enums\Messages\TravelActions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateTravelRequest;
+use App\Http\Requests\UpdateTravelRequest;
 use App\Http\Resources\TravelResource;
 use App\Models\Travel;
+use App\Services\TravelService;
 use App\Utils\APIResponder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
@@ -17,30 +21,39 @@ final class TravelController extends Controller
     //
     use APIResponder;
 
+    public function __construct(
+        private readonly TravelService $travelService
+    ){}
     public function store(CreateTravelRequest $request): JsonResponse
     {
-        $travel = Travel::create($request->validated());
-
-        return $this->successResponse(new TravelResource($travel), 'Travel Created Successfully!!');
+        return $this->successResponse(
+            new TravelResource(
+                $this->travelService->create(
+                    TravelDTO::fromArray(
+                        $request->validated()
+                        )
+                    )
+            ),
+            TravelActions::CREATED->value
+        );
+    }
+    public function update(UpdateTravelRequest $request, string $slug): JsonResponse
+    {
+        return $this->successResponse(
+            new TravelResource(
+                $this->travelService->update(
+                    $slug,
+                        $request->validated()
+                )
+            ), TravelActions::UPDATED->value
+        );
     }
 
-    public function update(Travel $travel, CreateTravelRequest $request): JsonResponse
+    public function destroy(string $slug): JsonResponse
     {
-        $travel->update($request->validated());
-
-        if (isset($travel->name)) {
-            $travel->slug = Str::slug($travel->name);
-        }
-
-        $travel->save();
-
-        return $this->successResponse(new TravelResource($travel), 'Travel Updated Successfully!!');
-    }
-
-    public function destroy(Travel $travel): JsonResponse
-    {
-        $travel->delete();
-
-        return $this->successResponse($travel, 'Travel deleted successfully!');
+        return $this->successResponse(
+            $this->travelService->delete($slug),
+            TravelActions::DELETED->value
+        );
     }
 }
