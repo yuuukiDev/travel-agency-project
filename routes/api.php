@@ -73,8 +73,8 @@ Route::prefix('admin')
         // tour routes
         Route::controller(App\Http\Controllers\Admin\TourController::class)->group(function () {
             Route::post('travels/{travel}/tours', 'store');
-            Route::put('travels/{travel}/tours', 'update');
-            Route::delete('travels/{travel}/tours', 'destroy');
+            Route::put('travels/{travel}/tours/{tour}', 'update');
+            Route::delete('travels/{travel}/tours/{tour}', 'destroy');
         });
 
         Route::controller(App\Http\Controllers\Admin\TourImageController::class)->group(function () {
@@ -93,7 +93,6 @@ Route::prefix('editor')
 
         // travel route
         Route::put('travels/{travel}', [App\Http\Controllers\Admin\TravelController::class, 'update']);
-
         // tour route
         Route::put('travels/{travel}/tours', [App\Http\Controllers\Admin\TourController::class, 'update']);
 

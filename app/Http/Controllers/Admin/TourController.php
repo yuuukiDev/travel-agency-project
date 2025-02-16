@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\DTOs\TourDTO;
+use App\Enums\Messages\TourActions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateTourRequest;
+use App\Http\Requests\UpdateTourRequest;
 use App\Http\Resources\TourResource;
-use App\Models\Tour;
-use App\Models\Travel;
+use App\Services\TourService;
 use App\Utils\APIResponder;
 use Illuminate\Http\JsonResponse;
 
@@ -16,25 +18,42 @@ final class TourController extends Controller
 {
     use APIResponder;
 
-    //
-    public function store(CreateTourRequest $request, Travel $travel): JsonResponse
-    {
-        $tour = Tour::create(array_merge($request->validated(), ['travel_id' => $travel->id]));
+    public function __construct(
+        private readonly TourService $tourService
+    ){}
 
-        return $this->successResponse(new TourResource($tour), 'Tour Created Successfully!!');
+    public function store(CreateTourRequest $request, string $slug): JsonResponse
+    {
+        return $this->successResponse(
+            new TourResource(
+                $this->tourService->create(
+                    $slug, TourDTO::fromArray(
+                        $request->validated()
+                    )
+                )
+            ),
+            TourActions::CREATED->value
+        );
     }
+        public function update(string $travelSlug, string $tourSlug, UpdateTourRequest $request): JsonResponse
+        {
+            return $this->successResponse(
+                new TourResource(
+                    $this->tourService->update(
+                        $travelSlug, $tourSlug, $request->validated()
+                    )
+                ),
+                TourActions::UPDATED->value
+            );
+        }
 
-    public function update(Travel $travel, CreateTourRequest $request): JsonResponse
+    public function destroy(string $travelSlug, string $tourSlug): JsonResponse
     {
-        $travel->tours()->update($request->validated());
-
-        return $this->successResponse(new TourResource($travel), 'Tour Updated Successfully!!');
-    }
-
-    public function destroy(Travel $travel): JsonResponse
-    {
-        $travel->tours()->delete();
-
-        return $this->successResponse($travel, 'Tour deleted successfully');
+        return $this->successResponse(
+            $this->tourService->delete(
+                $travelSlug, $tourSlug
+            ),
+            TourActions::DELETED->value
+        );
     }
 }
