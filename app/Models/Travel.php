@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Utils\Sluggable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
@@ -12,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 final class Travel extends Model
 {
-    use HasUuids, SoftDeletes;
+    use HasUuids, SoftDeletes, Sluggable;
     //
 
     protected $table = 'travels';

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('travel_id')->nullable()->constrained('travels')->cascadeOnDelete();
             $table->string('name')->nullable()->index();
+            $table->string('slug')->nullable()->unique()->index();
             $table->date('starting_date')->nullable()->index();
             $table->date('ending_date')->nullable()->index();
             $table->decimal('price', 8, 2)->nullable()->index();

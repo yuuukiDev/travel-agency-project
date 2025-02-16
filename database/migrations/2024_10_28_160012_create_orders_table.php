@@ -20,7 +20,7 @@ return new class extends Migration
             ->nullable()
             ->constrained('users')
             ->cascadeOnDelete();
-            $table->tinyInteger('status')->default(OrderStatus::PENDING->value)->index();
+            $table->unsignedTinyInteger('status')->default(OrderStatus::PENDING->value)->index();
             $table->timestamps();
             $table->softDeletes();
         });

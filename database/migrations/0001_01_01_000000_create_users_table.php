@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('email')->nullable()->index();
             $table->string('password')->nullable();
-            $table->tinyInteger('is_active')->default(UserStatus::INACTIVE->value)->index();
+            $table->unsignedTinyInteger('is_active')->default(UserStatus::INACTIVE->value)->index();
             $table->string('verification_code')->nullable()->index();
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
