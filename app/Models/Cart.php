@@ -28,7 +28,7 @@ final class Cart extends Model
         return $this->hasMany(CartItem::class);
     }
 
-    public function getTotalAttribute()
+    public function getTotalAttribute(): int
     {
         return $this->items->sum(fn ($item) => $this->total);
     }

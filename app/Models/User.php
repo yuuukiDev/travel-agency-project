@@ -27,16 +27,11 @@ final class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'first_name',
-        'last_name',
-        'phone_number',
-        'address',
-        'avatar',
         'email',
         'password',
         'role',
         'is_active',
-        'verification_code',
+        'verification_code'
     ];
 
     /**
@@ -49,16 +44,6 @@ final class User extends Authenticatable
         'remember_token',
     ];
 
-    public function roles(): BelongsToMany
-    {
-        return $this->belongsToMany(Role::class);
-    }
-
-    public function cart(): HasOne
-    {
-        return $this->hasOne(Cart::class);
-    }
-
     /**
      * Get the attributes that should be cast.
      *
@@ -70,5 +55,19 @@ final class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
+    public function cart(): HasOne
+    {
+        return $this->hasOne(Cart::class);
+    }
+    public function user(): HasOne
+    {
+        return $this->hasOne(UserProfile::class);
     }
 }

@@ -15,13 +15,19 @@ return new class extends Migration
     {
         Schema::create('order_items', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('order_id')->constrained('orders')->cascadeOnDelete();
-            $table->foreignUuid('tour_id')->constrained('tours')->cascadeOnDelete();
-            $table->string('tour_name');
-            $table->string('tour_image');
-            $table->unsignedBigInteger('qty');
-            $table->decimal('price', 8, 2);
-            $table->decimal('sub_total', 8, 2);
+            $table->foreignUuid('order_id')
+            ->nullable()
+            ->constrained('orders')
+            ->cascadeOnDelete();
+            $table->foreignUuid('tour_id')
+            ->nullable()
+            ->constrained('tours')
+            ->cascadeOnDelete();
+            $table->string('tour_name')->nullable();
+            $table->string('tour_image')->nullable();
+            $table->unsignedBigInteger('qty')->nullable();
+            $table->decimal('price', 8, 2)->nullable();
+            $table->decimal('sub_total', 8, 2)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

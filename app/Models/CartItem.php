@@ -29,7 +29,7 @@ final class CartItem extends Model
         return $this->belongsTo(Tour::class);
     }
 
-    public function getTotalAttribute()
+    public function getTotalAttribute(): float
     {
         return $this->qty * $this->tour->price;
     }

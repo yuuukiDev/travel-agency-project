@@ -15,7 +15,7 @@ final class TourImage extends Model
 
     protected $fillable = [
         'tour_id',
-        'image_path',
+        'path',
     ];
 
     public function tour(): BelongsTo

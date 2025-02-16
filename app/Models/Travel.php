@@ -30,17 +30,17 @@ final class Travel extends Model
         return $this->hasMany(Tour::class);
     }
 
-    public function getNumberOfNightsAttribute()
+    public function getNumberOfNightsAttribute(): int
     {
         return $this->number_of_days - 1;
     }
 
-    public function scopePublic(Builder $query)
+    public function scopePublic(Builder $query): void
     {
         $query->where('is_public', true);
     }
 
-    public function scopNotPublic(Builder $query)
+    public function scopNotPublic(Builder $query): void
     {
         $query->where('is_public', false);
     }
