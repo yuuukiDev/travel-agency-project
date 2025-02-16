@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Auth;
 
+use App\DTOs\Auth\RegisterDTO;
+use App\Enums\Messages\AuthMessages;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\ForgetPasswordRequest;
@@ -30,8 +32,11 @@ final class AuthController extends Controller
 
         return $this->successResponse(
             $this->authService->register(
-                $request->validated()),
-            'User Registered, Waiting for verification.'
+                RegisterDTO::fromArray(
+                    $request->validated()
+                )
+            ),
+            AuthMessages::REGISTERED->value
         );
     }
 
@@ -41,8 +46,8 @@ final class AuthController extends Controller
         return $this->successResponse(
             $this->authService->verify(
                 $request->validated()),
-            'User verified. You can now log in.'
-        );
+                AuthMessages::VERIFIED->value
+            );
     }
 
     public function login(LoginRequest $request): JsonResponse
@@ -50,8 +55,8 @@ final class AuthController extends Controller
         return $this->successResponse(
             $this->authService->login(
                 $request->validated()),
-            'Login successful.'
-        );
+                AuthMessages::LOGGED_IN->value
+            );
     }
 
     public function forgetPassword(ForgetPasswordRequest $request): JsonResponse
@@ -88,8 +93,8 @@ final class AuthController extends Controller
         return $this->successResponse(
             $this->authService->logout(
                 auth()->user()),
-            'Logged out successfully.'
-        );
+                AuthMessages::LOGGED_OUT->value
+            );
 
     }
 }

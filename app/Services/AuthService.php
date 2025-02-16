@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\DTOs\Auth\RegisterDTO;
 use App\Enums\UserStatus;
 use App\Events\UserVerificationRequested;
 use App\Exceptions\PasswordException;
@@ -19,9 +20,9 @@ final class AuthService
         private readonly AuthRepository $authRepository,
         private readonly TokenManager $tokenManager
     ){}
-    public function register(array $data): array
+    public function register(RegisterDTO $dto): array
     {
-        $user = $this->authRepository->create($data);
+        $user = $this->authRepository->create($dto->toArray());
 
         event(new UserVerificationRequested($user));
 

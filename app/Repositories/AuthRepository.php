@@ -5,9 +5,10 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
+use App\Interfaces\AuthInterface;
 use App\Models\User;
 
-final class AuthRepository
+final class AuthRepository implements AuthInterface
 {
 
     public function create(array $data): User
