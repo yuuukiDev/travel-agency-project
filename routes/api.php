@@ -32,7 +32,7 @@ Route::get('/travels/{travel:slug}/tours', [TourController::class, 'index']);
 
     });
     Route::middleware('auth:api')
-    ->post('/verify', VerifyController::class);    
+    ->post('/verify', VerifyController::class);
 
     // Profile routes
 

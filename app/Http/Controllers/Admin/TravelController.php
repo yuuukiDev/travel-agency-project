@@ -10,11 +10,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateTravelRequest;
 use App\Http\Requests\UpdateTravelRequest;
 use App\Http\Resources\TravelResource;
-use App\Models\Travel;
 use App\Services\TravelService;
 use App\Utils\APIResponder;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Str;
 
 final class TravelController extends Controller
 {
