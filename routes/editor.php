@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('editor')
     ->middleware(['auth:sanctum', 'role:editor'])
-    ->group(function () {
+    ->group(function (): void {
 
         Route::put('travels/{travel}', [TravelController::class, 'update']);
 
