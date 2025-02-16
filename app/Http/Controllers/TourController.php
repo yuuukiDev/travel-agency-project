@@ -9,6 +9,7 @@ use App\Http\Resources\TourResource;
 use App\Models\Travel;
 use App\Services\TourService;
 use App\Utils\APIResponder;
+use Illuminate\Http\JsonResponse;
 
 final class TourController extends Controller
 {
@@ -24,7 +25,7 @@ final class TourController extends Controller
         $this->tourService = $tourService;
     }
 
-    public function index(Travel $travel, ToursListRequest $request)
+    public function index(Travel $travel, ToursListRequest $request): JsonResponse
     {
         $tours = $this->tourService->filterTours($travel, $request);
 

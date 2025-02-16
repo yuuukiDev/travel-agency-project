@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\TravelResource;
 use App\Models\Travel;
 use App\Utils\APIResponder;
+use Illuminate\Http\JsonResponse;
 
 final class TravelController extends Controller
 {
@@ -15,7 +16,7 @@ final class TravelController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): JsonResponse
     {
         $travels = Travel::public()
             ->with('tours')

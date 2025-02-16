@@ -8,6 +8,7 @@ use App\Http\Requests\CartRequest;
 use App\Http\Resources\CartResource;
 use App\Services\CartService;
 use App\Utils\APIResponder;
+use Illuminate\Http\JsonResponse;
 
 final class CartController extends Controller
 {
@@ -23,7 +24,7 @@ final class CartController extends Controller
         $this->cartService = $cartService;
     }
 
-    public function index()
+    public function index(): JsonResponse
     {
         return $this->successResponse(
             new CartResource(
@@ -35,7 +36,7 @@ final class CartController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CartRequest $request, $travel, $tour)
+    public function store(CartRequest $request, string $travel, string $tour): JsonResponse
     {
         return $this->successResponse(
             $this->cartService->addItemToCart(auth()->id(),
@@ -47,7 +48,7 @@ final class CartController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(CartRequest $request, $cartItemId)
+    public function update(CartRequest $request, int $cartItemId): JsonResponse
     {
 
         return $this->successResponse(
@@ -61,7 +62,7 @@ final class CartController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($cartItemId)
+    public function destroy(int $cartItemId): JsonResponse
     {
         //
         return $this->successResponse(

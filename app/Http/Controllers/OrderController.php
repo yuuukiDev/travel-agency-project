@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Services\OrderService;
 use App\Utils\APIResponder;
+use Illuminate\Http\JsonResponse;
 
 final class OrderController extends Controller
 {
@@ -21,7 +22,7 @@ final class OrderController extends Controller
     /**
      * Confirm an order from the cart.
      */
-    public function confirm($cartId)
+    public function confirm(int $cartId): JsonResponse
     {
         return $this->successResponse(
             $this->orderService->confirm(
@@ -33,7 +34,7 @@ final class OrderController extends Controller
     /**
      * Accept an order by ID.
      */
-    public function accept($orderId)
+    public function accept(int $orderId): JsonResponse
     {
         return $this->successResponse(
             $this->orderService->accept(

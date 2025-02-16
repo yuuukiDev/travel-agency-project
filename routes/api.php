@@ -25,7 +25,6 @@ Route::middleware(['throttle:5,1'])
 
         Route::post('/forget-password', 'forgetPassword');
 
-        Route::post('/check-verification-code', 'checkVerificationCode');
     });
 
 // authenticated endpoints
@@ -35,6 +34,7 @@ Route::middleware('auth:api')->group(function () {
     // Authentication routes
 
     Route::controller(AuthController::class)->group(function () {
+        Route::post('/check-verification-code', 'checkVerificationCode');
         Route::post('/register/verification/', 'verify')->middleware('throttle:5,1');
         Route::post('/reset-password', 'resetPassword')->middleware('throttle:5,1');
         Route::post('/logout', 'logout');

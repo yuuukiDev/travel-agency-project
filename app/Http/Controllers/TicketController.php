@@ -7,6 +7,8 @@ namespace App\Http\Controllers;
 use App\Services\TicketService;
 use App\Utils\APIResponder;
 use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 final class TicketController extends Controller
 {
@@ -19,7 +21,7 @@ final class TicketController extends Controller
         $this->ticketService = $ticketService;
     }
 
-    public function send($orderId)
+    public function send(int $orderId): JsonResponse
     {
         try {
 
@@ -35,7 +37,7 @@ final class TicketController extends Controller
         }
     }
 
-    public function download($orderId)
+    public function download(int $orderId): Response
     {
         return $this->ticketService->downloadTicket($orderId);
     }
