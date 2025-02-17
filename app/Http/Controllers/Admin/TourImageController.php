@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\Messages\TourActions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TourImageRequest;
 use App\Models\Tour;
@@ -14,33 +15,37 @@ use Illuminate\Http\JsonResponse;
 final class TourImageController extends Controller
 {
     use APIResponder;
+    
+    public function __construct(
+        private readonly TourImageService $tourImageService
+    ){}
 
-    private TourImageService $tourImageService;
-
-    public function __construct(TourImageService $tourImageService)
+    public function store(TourImageRequest $request, string $slug): JsonResponse
     {
-        $this->tourImageService = $tourImageService;
-    }
-
-    public function store(TourImageRequest $request, Tour $tour): JsonResponse
-    {
-        return $this->successResponse($this->tourImageService->upload($request->validated(), $tour->id), 'Tour image uploaded successfully!');
-    }
-
-    public function update(TourImageRequest $request, Tour $tour, int $tour_image_id): JsonResponse
-    {
-
         return $this->successResponse(
-            $this->tourImageService->update($request->validated(), $tour->id, $tour_image_id),
-            'Tour image updated successfully!'
+            $this->tourImageService->handleImageOperations(
+                 $slug,$request->file('images')
+            ),
+            TourActions::IMAGE_CREATED->value
         );
     }
 
-    public function destroy(Tour $tour, int $tour_image_id): JsonResponse
-    {
-        return $this->successResponse(
-            $this->tourImageService->delete(['tour_image_id' => $tour_image_id], $tour->id),
-            'Image deleted successfully from the tour'
-        );
-    }
+    // public function update(TourImageRequest $request, Tour $tour, int $tour_image_id): JsonResponse
+    // {
+
+    //     return $this->successResponse(
+    //         $this->tourImageService->upload(
+    //              $slug,$request->validated()
+    //         ),
+    //         TourActions::IMAGE_UPDATED->value
+    //     );
+    // }
+
+    // public function destroy(Tour $tour, int $tour_image_id): JsonResponse
+    // {
+    //     return $this->successResponse(
+    //         $this->tourImageService->delete(['tour_image_id' => $tour_image_id], $tour->id),
+    //         'Image deleted successfully from the tour'
+    //     );
+    // }
 }

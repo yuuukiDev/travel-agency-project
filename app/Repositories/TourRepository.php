@@ -6,6 +6,7 @@ namespace App\Repositories;
 
 use App\Interfaces\TourInterface;
 use App\Models\Tour;
+use App\Models\TourImage;
 use App\Models\Travel;
 
 final class TourRepository implements TourInterface
@@ -30,4 +31,16 @@ final class TourRepository implements TourInterface
 
         return $this->getTourBySlug($tourSlug);
     }
+    public function createImages(Tour $tour, array $paths): void
+    {
+        $tour->images()->createMany(
+            array_map(fn ($path) => ['path' => $path], $paths)
+        );
+    }
+
+    public function getImagesByTour(Tour $tour): array
+    {
+        return $tour->images()->get()->all();
+    }
+
 }

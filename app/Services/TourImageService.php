@@ -4,58 +4,71 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Models\TourImage;
+use App\Models\Tour;
+use App\Repositories\TourImageRepository;
+use App\Repositories\TourRepository;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Facades\DB;
 final class TourImageService
 {
-    public function upload($data, $tourId)
+    private const STORAGE_DISK = 'public';
+    private const IMAGE_DIR = 'tour_images';
+    public function __construct(
+        private readonly TourRepository $tourRepository,
+        private readonly TourImageRepository $tourImageRepository
+    ){}
+    public function handleImageOperations(string $slug, array $newImages = [], array $deleteImagesIds = []): array 
     {
-        return $this->createImage($data['image'], $tourId);
+        return DB::transaction(function () use ($slug, $newImages): array {
+            $tour = $this->tourRepository->getTourBySlug($slug);
+
+            $this->validateImageCount($tour, count($newImages), count($deleteImagesId));
+
+            $paths = $this->storeImages($newImages);
+
+            try {
+                if (!empty($deleteImagesId)) {
+                    $this->tourImageRepository->deleteImages($deleteImagesIds);
+                }
+                if (!empty($paths)) {
+                    $this->tourImageRepository->createImages($tour, $paths);
+                }
+            
+                $this->tourRepository->createImages($tour, $paths);
+
+                return $paths;
+
+            } catch (\Exception $e) {
+                $this->cleanupFailedOperations($paths);
+                throw $e;
+            }
+        });
     }
-
-    public function update($data, $tourId, $tourImageId)
+    private function storeImages(array $images): array
     {
-        $tourImage = $this->findAndDeleteImage(['tour_image_id' => $tourImageId], $tourId);
-
-        return $this->updateImage($tourImage, $data['image']);
+        return array_map(
+            fn ($image) => $image->store(self::IMAGE_DIR, self::STORAGE_DISK),
+            $images
+        );
     }
-
-    public function delete($data, $tourId)
+    private function cleanupFailedOperations(array $paths): void
     {
-        $tourImage = $this->findAndDeleteImage($data, $tourId);
-
-        $tourImage->delete();
+        foreach($paths as $path) {
+            Storage::disk(self::STORAGE_DISK)->delete($path);
+        }
     }
-
-    /**
-     * Create a new class instance.
-     */
-    private function createImage($image, $tourId)
+    private function validateImageCount(Tour $tour, int $new, int $delete): void
     {
-        $path = $image->store('tour_images', 'public');
+        $curr = count($this->tourRepository->getImagesByTour($tour));
 
-        return TourImage::create([
-            'tour_id' => $tourId,
-            'image_path' => $path,
-        ]);
-    }
+        $result = $curr - $delete + $new;
 
-    private function updateImage(TourImage $tourImage, $image)
-    {
-        $newImagePath = $image->store('tour_images', 'public');
-
-        $tourImage->update(['image_path' => $newImagePath]);
-
-        return $tourImage;
-    }
-
-    private function findAndDeleteImage(array $data, $tourId): TourImage
-    {
-        $tourImage = TourImage::where('tour_id', $tourId)->findOrFail($data['tour_image_id']);
-
-        Storage::disk('public')->delete($tourImage->image_path);
-
-        return $tourImage;
+        if ($result < 10) {
+            abort(Response::HTTP_BAD_REQUEST, 'Maximum of 10 images per tour exceeded');
+        }
+        if ($result < 1) {
+            abort(Response::HTTP_BAD_REQUEST, 'Tour must have at least one image');
+        }
     }
 }

@@ -30,7 +30,7 @@ final class Tour extends Model
         return $this->belongsTo(Travel::class);
     }
 
-    public function tourImages(): HasMany
+    public function images(): HasMany
     {
         return $this->hasMany(TourImage::class);
     }

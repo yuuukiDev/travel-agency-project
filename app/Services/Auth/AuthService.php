@@ -11,6 +11,7 @@ use App\Events\UserVerificationRequested;
 use App\Models\User;
 use App\Repositories\AuthRepository;
 use App\Utils\APIResponder;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 
 final class AuthService
@@ -50,14 +51,14 @@ final class AuthService
     public function ensureUserIsActive(User $user): void
     {
         if ($user->is_active !== UserStatus::ACTIVE->value) {
-            abort(400, AuthMessages::USER_INACTIVE_OR_BLOCKED->value);
+            abort(Response::HTTP_BAD_REQUEST, AuthMessages::USER_INACTIVE_OR_BLOCKED->value);
         }
     }
 
     private function ensureCredentialsIsValid(User $user, string $password): void
     {
         if (! Hash::check($password, $user->password)) {
-            abort(400, AuthMessages::INVALID_PASSWORD->value);
+            abort(Response::HTTP_BAD_REQUEST, AuthMessages::INVALID_PASSWORD->value);
         }
     }
 }

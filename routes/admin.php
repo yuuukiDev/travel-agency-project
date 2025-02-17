@@ -24,7 +24,7 @@ Route::prefix('admin')
         });
 
         Route::controller(TourImageController::class)->group(function (): void {
-            Route::post('tours/{tour}/images', 'store');
+            Route::post('tours/{tour}', 'store');
             Route::post('tours/{tour}/images/{tour_image_id}', 'update');
             Route::delete('tours/{tour}/images/{tour_image_id}', 'destroy');
         });
